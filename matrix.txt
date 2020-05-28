@@ -1,0 +1,73 @@
+SWC doesn't cover hash details, ** tags **, snapshots/changes (only implicit), dangerous operations, (covers checkout, but only for individual files or to restore to most recent commit e.g. unstaging (and deleting) changes), (covers "help", but only through one specific example - students may not realise it is generalisable)
+
+Does include remote, push, pull, fetch, merge conflicts
+
+---------------------------------------------------
+
+(tabbed topics are useful but not essential)
+
+Beginner topics (version control as personal backup):
+
+   Motivation for (distributed) version control
+SHA-1 hash IDs
+   ID components and uses
+Three areas
+   Stores snapshots, works with changes (contents, not files)
+   Used in lots of places (e.g. GitHub, IDEs)
+   Certain operations will cause you to lose uncommitted changes
+.gitignore
+   Meaningful commit messages
+
+   'help COMMAND'
+'log'
+   'log ...'
+'checkout COMMIT [FILE]'
+'add FILE', 'add .'
+   'diff ...'
+'status'
+'commit -m MESSAGE'
+'tag NAME [COMMIT]'
+'revert COMMIT'
+'init'
+   'config' (don't have to understand, just use)
+            (specify name, email, editor (nano), line-endings)
+
+---------------------------
+
+Intermediate topics (working with others - branching and remotes):
+
+   Advanced staging
+Merge (rebase, cherry-pick, etc) conflicts
+Commit tree
+Rewriting history==replacing history
+Don't rewrite shared history
+   Dangling commits
+   Telling the project's story (via its history)
+   Merge/rebase controversy
+Commit-ish parameters (branch, tag, ID, partial-ID, relative ref, etc)
+   Relative references (~N, ^N)
+
+   'commit --amend ...'
+'branch ...'
+   'checkout -b COMMIT'
+'reset [FILE]'
+'reset [--soft/--mixed/--hard] COMMIT'
+'merge ...'
+'rebase DESTINATION [SOURCE]'
+   'rebase -i DESTINATION [SOURCE]'
+   'pull [REMOTE [BRANCH]] [--rebase]'
+'fetch [REMOTE]'
+'push [REMOTE [BRANCH]]'
+   'format-patch COMMIT'
+   'apply PATCH' (NB: "plumbing" command)
+   'am FILE/DIRECTORY'
+   'request-pull ...'
+'clone REPOSITORY [DIRECTORY]'
+   'blame FILE'
+'cherry-pick COMMIT'
+   'clean ...'
+   'gc ...'
+   'remote ...'
+   'shortlog ...'
+   'stash ...'
+   'show ...'

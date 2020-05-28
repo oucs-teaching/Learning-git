@@ -1,0 +1,102 @@
+FOR DEVELOPING OUR OWN TUTORIAL
+
+How are our students likely to use git?
+1) For their own stuff, focus on local repository, commits, branches, merges, tags.
+2) Useful diagnostics (logs, descriptions, etc)
+3) For group work, focus on remote repository, look into syncing, merge issues.
+4) Look at some of the fancy things you can do (rebasing, cherry-picking, pulling/pushing to specific branches)
+
+Valuable to have a representation of both the three areas (working directory, staging area, repository), as well as the commit tree; helps explain a number of operations more clearly in terms of effect.
+
+Is it better to show the full steps before the shortcut? E.g. can create and checkout a branch in one step, but might be better to introduce separately first. Varies - better to introduce "checkout -b" for making a new branch as you're likely to want to add something to that branch immediately. However, don't talk about "pull" because want to be in the habit of using "fetch" (talk about "pull" later as an "if you're _sure_ that's what you want to do" option). Requires appropriate branch to be checked-out (or to specify with arguments) in order to "pull", can "fetch" regardless (e.g. with "bugFix" checked out, you would need to use "git pull origin master" to merge the remote master (into "bugFix"); "git pull" (without arguments) will only work if "bugFix" has a remote tracking branch).
+
+If you present people with an undirected DAG (i.e. tell them the edges are one-way, but don't display arrows on them), which way will people assume the edges point? CS students would probably assume a top-down tree points downward. What about bottom-up? Left-to-right?. What about non-CS students?
+(Need to know directions to explain fast-forward merge, why some commits get garbage collected, etc.)
+
+---
+
+Best way(s) to display commit history (for learners):
+
+- Directed connections, arrows point from child -> parent(s); need direction to explain why some merges are just fast-forward (one commit in the history of the other), need to point backwards to explain why commits become unreachable (e.g. detached HEAD).
+
+- With labels, distinguish tags (e.g. "v1.0"), branches (e.g. "master"), remote branches (e.g. "origin/master"); avoid confusion between the different types of labels, can reference commits via a tag or remote branch label but checking out either of them puts into detached HEAD mode.
+
+- Show HEAD label if detached, otherwise have marker on relevant branch label (maybe highlight relevant commit as well); mostly don't need to think about HEAD except in terms of "which branch is the current one", but should be clear.
+
+- Possibly have branches in different colours, combine (either blend colours or use e.g. stripes) for shared history (but try to ensure colours are visually distinct for both normal and colour-blind vision); helps show which commits are in the history of different branches.
+
+- Maintain display of unreachable commits, but greyed out; when talking about commit recovery, need to show they aren't (immediately) deleted but are not considered part of the history, also emphasises that rebase is "copy" not "move".
+
+- Use single randomly-chosen letter as ID for commits, add marker for "copied" (e.g. cherry-pick, amend, rebase) commits (e.g. copy of R denoted as R'); need a way to simply refer to commits, whole SHA-1 hash (or even first few characters) is impractical (but should be mentioned), if your diagram has more than 26 commits it's too complicated anyway.
+
+- Concatenate letters to demonstrate merge squashes (e.g. K and Q become KQ); makes it clear which commits are involved, and the order of application (which can make a difference in some cases), using simple examples so probably only squashing 2 into 1 (so unlikely to end up with awkwardly long ID).
+
+- Use outlines to indicate groups of commits (e.g. those fetched from a remote); need to be clear when referring to a group without interfering with the normal notation.
+
+- Gradually increase diagram complexity as features added (ala Ryan Hodson); don't add complexity before it's needed; probably start with just arrows, IDs, checked-out commit highlight, and greyed-out unreachable; add labels/colours when discussing branches, HEAD when covering unreachable commits/garbage collection, more complex IDs (R', KQ) when covering rebase etc, outlines when covering fetching, etc.
+
+---------------------
+
+COMMAND DETAILS
+
+Important config:
+git config --global user.name MYNAME
+git config --global user.email MYEMAIL
+git config --global core.editor nano
+git config --global core.autocrlf input
+   ("input" for OSX/Unix/Linux, "auto" for Windows - whether to convert line endings
+    (to LF) when committing, and (to CRLF) when checking out)
+git config --global core.safecrlf warn
+   (will prompt user if changing line endings is irreversable)
+
+Start off with "git init <projectname>" (for a local project, or can create a project on github - e.g. altitude.otago.ac.nz - and "clone" a local copy).
+
+There are complicated ways of tracking moved/deleted files using "git mv" or "git rm"; basically does shell "mv" or "rm" as well as specific "git add" commands. Can be done just by making changes and using appropriate "git add" command.
+
+"git commit --amend" adds current staging area to previous commit and replaces it (same as doing a reset, updating, then adding & committing).
+
+"git revert COMMIT" will make a new commit "undoing" the changes made in the specified commit. Will be conflicts if later commits have modified the same file(s).
+
+Show differences between (can also specify a particular file to compare):
+- "git diff" compare working directory and staging area
+- "git diff --staged [COMMIT]" compare staging area and HEAD/specified commit
+  ("--cached" does the same)
+- "git diff COMMIT" compare working directory and specified commit
+- "git diff COMMIT COMMIT" compares the specified commits
+
+"git show [LOCATION] FILE" shows the commit message and the changes (compared to it's parent) made to that file in that commit (HEAD if unspecified). Returns nothing if that file wasn't changed in that commit. "git show [<COMMITish>]" gives the details of the current/specified commit (author, date, message, changes, etc).
+
+"git push -u REMOTE BRANCH" sets a remote tracking branch for the specified branch (e.g. "git push -u origin master" will set remote tracking origin/master)
+
+Pull/fetch specifics:
+- "git fetch" just grabs everything new from the remote (creating tracking if needed)
+- "git pull" from a non-tracking branch does a fetch, then gives error message about
+  no tracking info for merging
+- "git pull" from a tracked branch does a fetch then merges the branch with its
+  counterpart
+- "git pull REMOTE BRANCH" merges the specified (remote) branch into the current
+  (local) branch (regardless of tracking)
+
+"checkout" moves HEAD, updates both staging area and working directory; "reset" moves HEAD and current branch (if any), can specify whether to copy that commit to staging area (default), staging area and working directory (--hard), or neither (--soft).
+
+"git merge --squash BRANCH" doesn't merge the branch; creates a new commit that combines all the commits in BRANCH and adds it to HEAD (but user has to manually commit it - most tutorials don't mention this). Commit is the equivalent of the merge-commit that would be created. "git merge --no-ff BRANCH" will (if it would normally fast-forward) create a new merge commit that has the same snapshot as the branch tip (where the fast-forward would end up).
+
+As branches are just label pointers, can safely delete a branch if it's been merged ("branch -d NAME" will warn if unmerged, "branch -D NAME" will delete anyway).
+
+---------------------
+
+IMPORTANT CONCEPTS
+
+Can distinguish "author" and "committer" of a commit (i.e. person who made the change vs. person who made the commit). They are usually the same, but you may (for example) get a colleague to do the commit for you if you're not in the office.
+
+Various operations (e.g. rebase, cherry-pick, reset, commit --amend) create a new version of an existing commit. If the old one is no longer accessable (by branch/tag - can still access by hash) it will (eventually) be garbage collected. Inconsistent time given for age of unreachable commits before they are garbage collected - some say a month, others say two weeks, can configure. Garbage collection automatically executed along with several commands (anything that creates objects in the repository) but can also manually execute with "git gc".
+
+Ability to checkout different versions of individual files (e.g. foo.txt from this commit, but bar.txt from a couple of commits back) is dangerous: older version is immediately staged, which cannot be undone by "git checkout", only "git reset"; if you commit, you're reverting some files to previous versions, but not others.
+
+Standard merge is 'three-way' in that it finds a common ancestor for branches, and gets the diff of each branch tip from that ancestor, then compares the diffs (in order to see if any conflicts).
+
+Git STORES snapshots, but WORKS WITH changes (e.g. a commit is stored as a snapshot of your files, but if you cherry-pick that commit it finds the diff from its parent and applies those changes for the new commit).
+
+Can only really explain/understand git commands by reference to their underlying effects. Reflects its origin as a tool for kernel software developers. Different mindset. Rather an ugly system - worth having nice UI but still understanding underlying idea. Shows what happens when you let programmers design the UI. Various instances of being able to do the same thing with different commands (given the right options), or the name of the command not really reflecting what it's doing. Very efficient, powerful, low-level - makes easy to integrate with other systems (e.g. IDEs). Distinguishes "porcelain" commands from "plumbing" commands - everyday vs. rare specialised use.
+
+When to choose rebase/merge seems a contentious topic. Main consideration is collaboration (rebase makes it harder to sync with other people's repositories). Within your own repository (even if you have a local and a remote copy) probably dependant on how complex the branch is (only rebase short/simple branches). Rebasing when there are conflicts seems messier than the equivalent merge. Some argue "clean" history is just vanity - makes harder to find actual source of a bug. My opinion is that it just shows you should be careful, whatever you're doing.

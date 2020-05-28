@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>BASE 5c</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <div id="gitgraph"></div>
+
+   <p>There are also two patch files ('<strong><code>0001-Add-feature.patch</code></strong>' and '<strong><code>0002-Fix-bug.patch</code></strong>') in a separate directory ('<strong><code>../patches/</code></strong>').</p>
+
+
+   <script type="text/javascript">
+
+      const graphContainer = document.getElementById("gitgraph");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const gitgraph = GitgraphJS.createGitgraph(graphContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const master = gitgraph.branch("master*");
+      master.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master.commit({ subject: "Add README", dotText: letterHash[1] });
+
+   </script>
+
+
+</body>
+
+</html>

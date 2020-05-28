@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>4b: stash</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+   <div id="beforegraph"></div>
+
+   <h2>Task</h2>
+   <p>The new feature has been modified and the changes staged, but they should be committed to the '<strong><code>new-feature</code></strong>' branch; please move the changes from the '<strong><code>master</code></strong>' branch to the '<strong><code>new-feature</code></strong>' branch and make the commit.</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git stash [push]</code><br>This will store the current state as a new stash.</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <div id="aftergraph1"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Stash stack</h3>
+   <div id="stashstack1"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git checkout new-feature</code><br>Switches to the '<strong><code>new-feature</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <div id="aftergraph2"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Stash stack</h3>
+   <div id="stashstack2"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git stash pop/apply [stash@{&lt;ID&gt;}]</code><br>This will give an error due to a conflict. "<code>[$] git status</code>" will show that the conflict is in '<strong><code>feature.txt</code></strong>' (its first line is different in the stash than in the '<strong><code>new-feature</code></strong>' branch).</li>
+
+      <hr>
+      <p><em><strong>NB:</strong></em> "<code>pop</code>" <em>normally both applies and drops the stash, but does not drop the stash in this case as there was a conflict.</em></p>
+      <hr>
+
+      <li>Remove the conflict markers (<em>i.e.</em> keep the lines from both versions)<br>Any text editor can be used to delete the relevant parts and then save the file.</li>
+
+      <li><code>[$] git add feature.txt</code><br>The corrected file is now staged, resolving the conflict.</li>
+
+      <li><code>[$] git commit -m "Update feature"</code><br>There will now be a new commit on the '<strong><code>new-feature</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <div id="aftergraph3"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Stash stack</h3>
+   <div id="stashstack3"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git stash drop [stash@{&lt;ID&gt;}]</code><br>The stash has been committed on its intended branch, so can be safely deleted (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <div id="aftergraph4"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Stash stack</h3>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git checkout master</code><br>Switches back to the '<strong><code>master</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div id="aftergraph5"></div>
+
+
+   <script type="text/javascript">
+
+      const beforeContainer = document.getElementById("beforegraph");
+
+      const afterContainer1 = document.getElementById("aftergraph1");
+      const stashContainer1 = document.getElementById("stashstack1");
+
+      const afterContainer2 = document.getElementById("aftergraph2");
+      const stashContainer2 = document.getElementById("stashstack2");
+
+      const afterContainer3 = document.getElementById("aftergraph3");
+      const stashContainer3 = document.getElementById("stashstack3");
+
+      const afterContainer4 = document.getElementById("aftergraph4");
+
+      const afterContainer5 = document.getElementById("aftergraph5");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const stashFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         colors: ["#FFA657"],
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 0,
+            label: {
+               display: false,
+            },
+         },
+         arrow: {
+            size: 0,
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+
+      const beforegraph = GitgraphJS.createGitgraph(beforeContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const aftergraph1 = GitgraphJS.createGitgraph(afterContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const stashstack1 = GitgraphJS.createGitgraph(stashContainer1, {
+         template: stashFormat,
+         reverseArrow: true,
+      });
+
+
+      const aftergraph2 = GitgraphJS.createGitgraph(afterContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const stashstack2 = GitgraphJS.createGitgraph(stashContainer2, {
+         template: stashFormat,
+         reverseArrow: true,
+      });
+
+
+      const aftergraph3 = GitgraphJS.createGitgraph(afterContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const stashstack3 = GitgraphJS.createGitgraph(stashContainer3, {
+         template: stashFormat,
+         reverseArrow: true,
+      });
+
+
+      const aftergraph4 = GitgraphJS.createGitgraph(afterContainer4, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const aftergraph5 = GitgraphJS.createGitgraph(afterContainer5, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const beforeMaster = beforegraph.branch("master*");
+      beforeMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      beforeMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const beforeNewFeature = beforegraph.branch("new-feature");
+      beforeNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      beforeNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const afterMaster1 = aftergraph1.branch("master*");
+      afterMaster1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster1.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature1 = aftergraph1.branch("new-feature");
+      afterNewFeature1.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature1.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const stashStack1 = stashstack1.branch("stack");
+      stashStack1.commit({ subject: "WIP on master: <COMMIT-ID> Add README", dotText: '{0}' });
+
+      const afterMaster2 = aftergraph2.branch("master");
+      afterMaster2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster2.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature2 = aftergraph2.branch("new-feature*");
+      afterNewFeature2.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature2.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const stashStack2 = stashstack2.branch("stack");
+      stashStack2.commit({ subject: "WIP on master: <COMMIT-ID> Add README", dotText: '{0}' });
+
+      const afterMaster3 = aftergraph3.branch("master");
+      afterMaster3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster3.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature3 = aftergraph3.branch("new-feature*");
+      afterNewFeature3.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature3.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterNewFeature3.commit({ subject: "Update feature", dotText: letterHash[4] });
+
+      const stashStack3 = stashstack3.branch("stack");
+      stashStack3.commit({ subject: "WIP on master: <COMMIT-ID> Add README", dotText: '{0}' });
+
+      const afterMaster4 = aftergraph4.branch("master");
+      afterMaster4.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster4.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature4 = aftergraph4.branch("new-feature*");
+      afterNewFeature4.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature4.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterNewFeature4.commit({ subject: "Update feature", dotText: letterHash[4] });
+
+      const afterMaster5 = aftergraph5.branch("master*");
+      afterMaster5.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster5.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature5 = aftergraph5.branch("new-feature");
+      afterNewFeature5.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature5.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterNewFeature5.commit({ subject: "Update feature", dotText: letterHash[4] });
+
+   </script>
+
+
+</body>
+
+</html>

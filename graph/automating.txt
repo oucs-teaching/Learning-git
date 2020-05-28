@@ -1,0 +1,40 @@
+- Better to build the desired repository first, then make a diagram matching it (as
+  can specify the actual hash codes from the repository when constructing the
+  diagram)
+
+- Hash codes for all the commit objects can be found by listing the contents of the
+  ".git/objects" directory, then using "git cat-file -t <HASH>" to check which are
+  commits (this will also include unreachable-but-not-yet-deleted commits).
+
+- Using "git cat-file -p <COMMIT-HASH>" lists the details of that commit, each
+  parent (if any) is on a separate line as "parent <COMMIT-HASH>" (lines in order are
+  "tree, parent(s), author, committer, <blank>, message"). The "author" and
+  "committer" lines have a unix timestamp and timezone at the end (e.g. "1573696123
+  +1300"), which could be useful for ordering the commits when generating a diagram
+  of the repository, but is useless if the repository has been automatically
+  generated (as the commits will all be within a second of each other).
+
+- "commitlist.py" (when called from the command line in a git repository's directory)
+  creates a list of commit objects and their parents (as described above).
+
+- SHA-1 hashes of branch tips can be found in ".git/refs/heads/..." ("master" etc.)
+  and ".git/refs/remotes/<REMOTENAME>/..." ("origin/master" etc.). They are text
+  files named for the branch, whose only contents is a 40-char hash code (for the
+  commit that branch points to).
+
+- The file ".git/config" contains the url for any remote(s) (found under the heading
+  '[remote "<NAME>"]', on an indented line beginning with "url = ").
+
+- Plenty of example exercises, relevant details like number of commits, names of
+  branches, etc. could be substituted in appropriate places. Constructing diagrams
+  should be straightforward (just ensure each has unique ids, variable names, etc),
+  except when dealing with unreachable commits (need to flag whole branch, not just
+  tip).
+    - All example exercises start with "master" checked out, and model answers all
+      end with "master" checked out
+
+- Automation will probably involve constructing an internal representation of the
+  graph (flag all commits as unreachable="yes" to start with, then follow each branch
+  setting unreachable="no"; if detached HEAD - i.e. file ".git/HEAD" contains a hash
+  code rather than a branch reference - then follow from HEAD setting
+  unreachable="detached HEAD" if unreachable="yes" or current commit is HEAD).

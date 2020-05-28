@@ -1,0 +1,28 @@
+Installed/updated git with homebrew ("brew install git", puts in /usr/local/bin/)
+
+I've set:
+git config --global core.editor nano (I try to stay out of the vi/emacs war)
+ ...                core.autocrlf input (convert files to LF when committing)
+ ...                core.safecrlf warn (prompt if conversion irreversable)
+
+---------------------
+
+   My "git log" aliases (set in .bashrc)
+
+alias gitadd="git add --all"
+
+alias gitfullcommit="git add --all; git commit -m 'Automated update'; git push"
+
+alias githist="git log --pretty=tformat:'%h %Cgreen%cd%Creset | %s%Cred%d%Creset %Cblue[%an]%Creset' --graph --date=format:'%Y %b-%d %R'"
+
+alias gitlog="githist --all"
+
+# %h = abbreviated commit hash
+# %cd = commit date
+# %Y %b-%d = YYYY Mon-DD
+# %R = HH:MM (24 hour)
+# %s = first line of commit message (i.e. subject)
+# %d = decorations (e.g. branch heads, tags)
+# %an = author name
+# %C[red/green/blue/reset] = change output colour
+# --all shows all commits, not just ones for current branch

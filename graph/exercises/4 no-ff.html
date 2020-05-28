@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>4: merge --no-ff</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+   <div id="beforegraph"></div>
+
+   <h2>Task</h2>
+   <p>The new feature has been completed; please integrate the '<strong><code>new-feature</code></strong>' branch into the '<strong><code>master</code></strong>' branch, but ensure you preserve the history of it as a separate branch.</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git merge --no-ff new-feature</code><br>This will automatically open the default text editor.</li>
+
+      <li>Save the default message, and quit the editor<br>There will now be a merge commit integrating the two branches (see below).</li>
+   </ul>
+
+   <div id="aftergraph"></div>
+
+
+   <script type="text/javascript">
+
+      const beforeContainer = document.getElementById("beforegraph");
+      const afterContainer = document.getElementById("aftergraph");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const beforegraph = GitgraphJS.createGitgraph(beforeContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph = GitgraphJS.createGitgraph(afterContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const beforeMaster = beforegraph.branch("master*");
+      beforeMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      beforeMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const beforeNewFeature = beforegraph.branch("new-feature");
+      beforeNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      beforeNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const afterMaster = aftergraph.branch("master*");
+      afterMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature = aftergraph.branch("new-feature");
+      afterNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterMaster.merge({ branch: "new-feature", fastForward: false, commitOptions: { subject: "Merge branch 'new-feature'", dotText: letterHash[4] } });
+
+   </script>
+
+
+</body>
+
+</html>

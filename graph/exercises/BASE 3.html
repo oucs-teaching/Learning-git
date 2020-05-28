@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>BASE 3</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph"></div>
+   </div>
+
+
+   <script type="text/javascript">
+
+      const localGraphContainer = document.getElementById("localgraph");
+      const remoteGraphContainer = document.getElementById("remotegraph");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const localgraph = GitgraphJS.createGitgraph(localGraphContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph = GitgraphJS.createGitgraph(remoteGraphContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const master = localgraph.branch("master*");
+      master.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originmaster = localgraph.branch("origin/master");
+      const newfeature = localgraph.branch("new-feature");
+      newfeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      newfeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const Omaster = remotegraph.branch("master");
+      Omaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster.commit({ subject: "Add test", dotText: letterHash[4] });
+
+   </script>
+
+
+</body>
+
+</html>

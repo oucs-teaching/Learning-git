@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>2: revert</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph1"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph1"></div>
+   </div>
+
+   <h2 style="clear: left;">Task</h2>
+   <p>The last commit (with the message "Add test") was a mistake, but it has already been shared with your collaborators. Please correct the mistake and share the correction.</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git revert &lt;LAST COMMIT&gt;</code><br>This will automatically open the default text editor.</li>
+
+   <hr>
+   <p><em><strong>NB:</strong> The last commit (labelled <span id="thirdcommit"></span> in the diagrams) can be referred to in several ways: using its commit hash (in full, or abbreviated), or by either '<code>HEAD</code>' or '<code>master</code>'.</em></p>
+   <hr>
+
+      <li>Save the default message, and quit the editor<br>There will now be a fourth '<strong><code>master</code></strong>' commit in the local repository, and '<strong><code>master</code></strong>' will be ahead of '<strong><code>origin/master</code></strong>' by one commit (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph2"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph2"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git push</code><br>The fourth '<strong><code>master</code></strong>' commit will now be in the remote repository, and '<strong><code>origin/master</code></strong>' will be caught up with '<strong><code>master</code></strong>' (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph3"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph3"></div>
+   </div>
+
+
+   <script type="text/javascript">
+
+      const localGraphContainer1 = document.getElementById("localgraph1");
+      const remoteGraphContainer1 = document.getElementById("remotegraph1");
+
+      const localGraphContainer2 = document.getElementById("localgraph2");
+      const remoteGraphContainer2 = document.getElementById("remotegraph2");
+
+      const localGraphContainer3 = document.getElementById("localgraph3");
+      const remoteGraphContainer3 = document.getElementById("remotegraph3");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const localgraph1 = GitgraphJS.createGitgraph(localGraphContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph1 = GitgraphJS.createGitgraph(remoteGraphContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const localgraph2 = GitgraphJS.createGitgraph(localGraphContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph2 = GitgraphJS.createGitgraph(remoteGraphContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const localgraph3 = GitgraphJS.createGitgraph(localGraphContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph3 = GitgraphJS.createGitgraph(remoteGraphContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const thirdcommitreference = document.getElementById("thirdcommit");
+      thirdcommitreference.innerHTML = letterHash[4];
+
+      const master1 = localgraph1.branch("master*");
+      master1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master1.commit({ subject: "Add README", dotText: letterHash[1] });
+      master1.commit({ subject: "Add test", dotText: letterHash[4] });
+      const originmaster1 = localgraph1.branch("origin/master");
+
+      const Omaster1 = remotegraph1.branch("master");
+      Omaster1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster1.commit({ subject: "Add README", dotText: letterHash[1] });
+      const OnewFeature1 = remotegraph1.branch("new-feature");
+      OnewFeature1.commit({ subject: "Add feature", dotText: letterHash[2] });
+      OnewFeature1.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      Omaster1.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master2 = localgraph2.branch("master*");
+      master2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master2.commit({ subject: "Add README", dotText: letterHash[1] });
+      master2.commit({ subject: "Add test", dotText: letterHash[4] });
+      const originmaster2 = localgraph2.branch("origin/master");
+      master2.commit({ subject: "Revert 'Add test'", dotText: "-" + letterHash[4] });
+
+      const Omaster2 = remotegraph2.branch("master");
+      Omaster2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster2.commit({ subject: "Add README", dotText: letterHash[1] });
+      const OnewFeature2 = remotegraph2.branch("new-feature");
+      OnewFeature2.commit({ subject: "Add feature", dotText: letterHash[2] });
+      OnewFeature2.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      Omaster2.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master3 = localgraph3.branch("master*");
+      master3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master3.commit({ subject: "Add README", dotText: letterHash[1] });
+      master3.commit({ subject: "Add test", dotText: letterHash[4] });
+      master3.commit({ subject: "Revert 'Add test'", dotText: "-" + letterHash[4] });
+      const originmaster3 = localgraph3.branch("origin/master");
+
+      const Omaster3 = remotegraph3.branch("master");
+      Omaster3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster3.commit({ subject: "Add README", dotText: letterHash[1] });
+      const OnewFeature3 = remotegraph3.branch("new-feature");
+      OnewFeature3.commit({ subject: "Add feature", dotText: letterHash[2] });
+      OnewFeature3.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      Omaster3.commit({ subject: "Add test", dotText: letterHash[4] });
+      Omaster3.commit({ subject: "Revert 'Add test'", dotText: "-" + letterHash[4] });
+
+   </script>
+
+
+</body>
+
+</html>

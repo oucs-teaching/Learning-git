@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>1: rebase</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+   <div id="beforegraph"></div>
+
+   <h2>Task</h2>
+   <p>Please update the '<strong><code>new-feature</code></strong>' branch to take into account the new development on the '<strong><code>master</code></strong>' branch.</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git checkout new-feature</code><br>Switches to the '<strong><code>new-feature</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div id="aftergraph1"></div>
+
+   <ul>
+      <li><code>[$] git rebase master</code><br>This will give an error due to a conflict. "<code>[$] git status</code>" will show that the conflict is in '<strong><code>tests.txt</code></strong>' (its first line is different in the last '<strong><code>master</code></strong>' commit than in the '<strong><code>new-feature</code></strong>' branch).</li>
+
+      <li>Remove the conflict markers (<em>i.e.</em> keep the lines from both branches)<br>Any text editor can be used to delete the relevant parts and then save the file.</li>
+
+      <li><code>[$] git add tests.txt</code><br>The corrected file is now staged, resolving the conflict.</li>
+
+      <li><code>[$] git rebase --continue</code><br>This completes the rebase process; there will now be two new commits on the '<strong><code>new-feature</code></strong>' branch, which now branches off from the third '<strong><code>master</code></strong>' commit (see below).</li>
+   </ul>
+
+   <div id="aftergraph2"></div>
+
+   <ul>
+      <li><code>[$] git checkout master</code><br>Switches back to the '<strong><code>master</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div id="aftergraph3"></div>
+
+   <hr>
+   <p><em><strong>NB:</strong> the old commits still exist, and can be viewed using, for example,</em> "<code>git log --graph --oneline --reflog</code>" <em>(see below).</em></p>
+
+   <div id="refloggraph"></div>
+
+
+   <script type="text/javascript">
+
+      const beforeContainer = document.getElementById("beforegraph");
+      const afterContainer1 = document.getElementById("aftergraph1");
+      const afterContainer2 = document.getElementById("aftergraph2");
+      const afterContainer3 = document.getElementById("aftergraph3");
+      const reflogContainer = document.getElementById("refloggraph");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         colors: ["#6963FF", "#47E8D4", "#47E8D4"],
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#f1c109"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const beforegraph = GitgraphJS.createGitgraph(beforeContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph1 = GitgraphJS.createGitgraph(afterContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph2 = GitgraphJS.createGitgraph(afterContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph3 = GitgraphJS.createGitgraph(afterContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const refloggraph = GitgraphJS.createGitgraph(reflogContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const beforeMaster = beforegraph.branch("master*");
+      beforeMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      beforeMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const beforeNewFeature = beforegraph.branch("new-feature");
+      beforeNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      beforeNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      beforeMaster.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const after1Master = aftergraph1.branch("master");
+      after1Master.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      after1Master.commit({ subject: "Add README", dotText: letterHash[1] });
+      const after1NewFeature = aftergraph1.branch("new-feature*");
+      after1NewFeature.commit({ subject: "Add feature", dotText: letterHash[2] });
+      after1NewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      after1Master.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const after2Master = aftergraph2.branch("master");
+      after2Master.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      after2Master.commit({ subject: "Add README", dotText: letterHash[1] });
+      after2Master.commit({ subject: "Add test", dotText: letterHash[4] });
+      const after2NewFeature = aftergraph2.branch("new-feature*");
+      after2NewFeature.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      after2NewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+      const after3Master = aftergraph3.branch("master*");
+      after3Master.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      after3Master.commit({ subject: "Add README", dotText: letterHash[1] });
+      after3Master.commit({ subject: "Add test", dotText: letterHash[4] });
+      const after3NewFeature = aftergraph3.branch("new-feature");
+      after3NewFeature.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      after3NewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+      const reflogMaster = refloggraph.branch("master*");
+      reflogMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      reflogMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const reflogNewFeatureOLD = refloggraph.branch("new-feature-OLD");
+      reflogNewFeatureOLD.commit({ subject: "Add feature", dotText: letterHash[2], unreachable: "yes" });
+      reflogNewFeatureOLD.commit({ subject: "Fix bug", dotText: letterHash[3], unreachable: "yes" });
+      reflogMaster.commit({ subject: "Add test", dotText: letterHash[4] });
+      const reflogNewFeature = refloggraph.branch("new-feature");
+      reflogNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      reflogNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+   </script>
+
+
+</body>
+
+</html>

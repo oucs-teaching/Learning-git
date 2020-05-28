@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>3: fetch, rebase</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph1"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph1"></div>
+   </div>
+
+   <h2 style="clear: left;">Task</h2>
+   <p>Your collaborators have made updates to the '<strong><code>master</code></strong>' branch while you have been working on a new feature. Please copy the new commit(s) and update your '<strong><code>new-feature</code></strong>' branch to account for the changes.
+</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git fetch</code><br>This will copy any new commits from the remote repository (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph2"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph2"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git checkout new-feature</code><br>Switches to the '<strong><code>new-feature</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph3"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph3"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git rebase origin/master</code><br>This will give an error due to a conflict. "<code>[$] git status</code>" will show that the conflict is in '<strong><code>tests.txt</code></strong>' (its first line is different in the '<strong><code>origin/master</code></strong>' commit than in the '<strong><code>new-feature</code></strong>' branch).</li>
+
+      <li>Remove the conflict markers (<em>i.e.</em> keep the lines from both branches)<br>Any text editor can be used to delete the relevant parts and then save the file.</li>
+
+      <li><code>[$] git add tests.txt</code><br>The corrected file is now staged, resolving the conflict.</li>
+
+      <li><code>[$] git rebase --continue</code><br>This completes the rebase process; there will now be two new commits on the '<strong><code>new-feature</code></strong>' branch, which now branches off from the third '<strong><code>master</code></strong>' commit (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph4"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph4"></div>
+   </div>
+
+   <ul style="clear: left;">
+      <li><code>[$] git checkout master</code><br>Switches back to the '<strong><code>master</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div style="width: 45%; float: left;">
+   <h3>Local</h3>
+   <div id="localgraph5"></div>
+   </div>
+
+   <div style="width: 45%; float: left;">
+   <h3>Remote ("<code>origin</code>")</h3>
+   <div id="remotegraph5"></div>
+   </div>
+
+   <hr style="clear: left;">
+   <p><em><strong>NB:</strong> the old commits still exist, and can be viewed using, for example,</em> "<code>git log --graph --oneline --reflog</code>" <em>(see below).</em></p>
+
+   <div id="localrefloggraph"></div>
+
+
+   <script type="text/javascript">
+
+      const localGraphContainer1 = document.getElementById("localgraph1");
+      const remoteGraphContainer1 = document.getElementById("remotegraph1");
+
+      const localGraphContainer2 = document.getElementById("localgraph2");
+      const remoteGraphContainer2 = document.getElementById("remotegraph2");
+
+      const localGraphContainer3 = document.getElementById("localgraph3");
+      const remoteGraphContainer3 = document.getElementById("remotegraph3");
+
+      const localGraphContainer4 = document.getElementById("localgraph4");
+      const remoteGraphContainer4 = document.getElementById("remotegraph4");
+
+      const localGraphContainer5 = document.getElementById("localgraph5");
+      const remoteGraphContainer5 = document.getElementById("remotegraph5");
+
+      const reflogGraphContainer = document.getElementById("localrefloggraph");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         colors: ["#6963FF", "#47E8D4", "#6963FF", "#47E8D4"],
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat2B =
+         GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         colors: ["#6963FF", "#6963FF", "#47E8D4"],
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#008fb5", "#f1c109"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const myFormatB = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#008fb5", "#f1c109"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+
+      const localgraph1 = GitgraphJS.createGitgraph(localGraphContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph1 = GitgraphJS.createGitgraph(remoteGraphContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const localgraph2 = GitgraphJS.createGitgraph(localGraphContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph2 = GitgraphJS.createGitgraph(remoteGraphContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const localgraph3 = GitgraphJS.createGitgraph(localGraphContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const remotegraph3 = GitgraphJS.createGitgraph(remoteGraphContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const localgraph4 = GitgraphJS.createGitgraph(localGraphContainer4, {
+         template: myFormat2B,
+         reverseArrow: true,
+      });
+
+      const remotegraph4 = GitgraphJS.createGitgraph(remoteGraphContainer4, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const localgraph5 = GitgraphJS.createGitgraph(localGraphContainer5, {
+         template: myFormat2B,
+         reverseArrow: true,
+      });
+
+      const remotegraph5 = GitgraphJS.createGitgraph(remoteGraphContainer5, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      const refloggraph = GitgraphJS.createGitgraph(reflogGraphContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+
+      const master1 = localgraph1.branch("master*");
+      master1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master1.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originMaster1 = localgraph1.branch("origin/master");
+      const newFeature1 = localgraph1.branch("new-feature");
+      newFeature1.commit({ subject: "Add feature", dotText: letterHash[2] });
+      newFeature1.commit({ subject: "Fix bug", dotText: letterHash[3] });
+
+      const Omaster1 = remotegraph1.branch("master");
+      Omaster1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster1.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster1.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master2 = localgraph2.branch("master*");
+      master2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master2.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originMaster2 = localgraph2.branch("origin/master");
+      const newFeature2 = localgraph2.branch("new-feature");
+      newFeature2.commit({ subject: "Add feature", dotText: letterHash[2] });
+      newFeature2.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      originMaster2.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const Omaster2 = remotegraph2.branch("master");
+      Omaster2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster2.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster2.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master3 = localgraph3.branch("master");
+      master3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master3.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originMaster3 = localgraph3.branch("origin/master");
+      const newFeature3 = localgraph3.branch("new-feature*");
+      newFeature3.commit({ subject: "Add feature", dotText: letterHash[2] });
+      newFeature3.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      originMaster3.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const Omaster3 = remotegraph3.branch("master");
+      Omaster3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster3.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster3.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master4 = localgraph4.branch("master");
+      master4.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master4.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originMaster4 = localgraph4.branch("origin/master");
+      originMaster4.commit({ subject: "Add test", dotText: letterHash[4] });
+      const newFeature4 = localgraph4.branch("new-feature*");
+      newFeature4.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      newFeature4.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+      const Omaster4 = remotegraph4.branch("master");
+      Omaster4.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster4.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster4.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const master5 = localgraph5.branch("master*");
+      master5.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      master5.commit({ subject: "Add README", dotText: letterHash[1] });
+      const originMaster5 = localgraph5.branch("origin/master");
+      originMaster5.commit({ subject: "Add test", dotText: letterHash[4] });
+      const newFeature5 = localgraph5.branch("new-feature");
+      newFeature5.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      newFeature5.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+      const Omaster5 = remotegraph5.branch("master");
+      Omaster5.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      Omaster5.commit({ subject: "Add README", dotText: letterHash[1] });
+      Omaster5.commit({ subject: "Add test", dotText: letterHash[4] });
+
+
+      const reflogMaster = refloggraph.branch("master*");
+      reflogMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      reflogMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const reflogNewFeatureOLD = refloggraph.branch("new-feature-OLD");
+      const reflogOriginMaster = refloggraph.branch("origin/master");
+      reflogNewFeatureOLD.commit({ subject: "Add feature", dotText: letterHash[2], unreachable: "yes" });
+      reflogNewFeatureOLD.commit({ subject: "Fix bug", dotText: letterHash[3], unreachable: "yes" });
+      reflogOriginMaster.commit({ subject: "Add test", dotText: letterHash[4] });
+      const reflogNewFeature = refloggraph.branch("new-feature");
+      reflogNewFeature.commit({ subject: "Add feature", dotText: letterHash[2] + "'" });
+      reflogNewFeature.commit({ subject: "Fix bug", dotText: letterHash[3] + "'" });
+
+   </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>5c: am</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+   <div id="beforegraph"></div>
+
+   <h2>Task</h2>
+   <p>You have been sent a couple of commits as patch files (they are in the directory '<strong><code>../patches/</code></strong>' relative to this repository). Please apply them to your repository as a branch called '<strong><code>new-feature</code></strong>'.</p>
+
+   <h2>Model Answer</h2>
+   <ul>
+      <li><code>[$] git branch new-feature</code><br>This will create a new branch.</li>
+
+      <li><code>[$] git checkout new-feature</code><br>This will switch to the new branch.</li>
+
+   <hr>
+   <p><em><strong>NB:</strong> The two commands above could be replaced by one command: '<code>[$] git checkout -b new-feature</code>'.</em></p>
+   <hr>
+
+   </ul>
+
+   <div id="aftergraph1"></div>
+
+   <ul>
+      <li><code>[$] git am ../patches/*.patch</code><br>This will apply the patches in numerical order.</li>
+
+   <hr>
+   <p><em><strong>NB:</strong> Patches</em> cannot be applied <em>if they conflict with the existing commits (though it is possible to skip over the conflicting patch and apply all the others by typing '<code>[$] git am --skip</code>' when a conflict occurs).</em></p>
+   <hr>
+
+   </ul>
+
+   <div id="aftergraph2"></div>
+
+   <ul>
+      <li><code>[$] git checkout master</code><br>This will switch back to the '<strong><code>master</code></strong>' branch.</li>
+   </ul>
+
+   <div id="aftergraph3"></div>
+
+
+   <script type="text/javascript">
+
+      const beforeContainer = document.getElementById("beforegraph");
+      const afterContainer1 = document.getElementById("aftergraph1");
+      const afterContainer2 = document.getElementById("aftergraph2");
+      const afterContainer3 = document.getElementById("aftergraph3");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const beforegraph = GitgraphJS.createGitgraph(beforeContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph1 = GitgraphJS.createGitgraph(afterContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph2 = GitgraphJS.createGitgraph(afterContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph3 = GitgraphJS.createGitgraph(afterContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const beforeMaster = beforegraph.branch("master*");
+      beforeMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      beforeMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+
+      const afterMaster1 = aftergraph1.branch("master");
+      afterMaster1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster1.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature1 = aftergraph1.branch("new-feature*");
+
+      const afterMaster2 = aftergraph2.branch("master");
+      afterMaster2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster2.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature2 = aftergraph2.branch("new-feature*");
+      afterNewFeature2.commit({ subject: "Add feature", dotText: letterHash[3] });
+      afterNewFeature2.commit({ subject: "Fix bug", dotText: letterHash[4] });
+
+      const afterMaster3 = aftergraph3.branch("master*");
+      afterMaster3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster3.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature3 = aftergraph3.branch("new-feature");
+      afterNewFeature3.commit({ subject: "Add feature", dotText: letterHash[3] });
+      afterNewFeature3.commit({ subject: "Fix bug", dotText: letterHash[4] });
+
+   </script>
+
+
+</body>
+
+</html>

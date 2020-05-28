@@ -1,0 +1,774 @@
+Learn Git Branching (interactive diagrams/command-line)
+http://learngitbranching.js.org/
+
+   Not good at explaining why you would use things; helpful visual presentation of commit tree (top-down), but no concept of staging area; branches given different colours (not explained), though seems to pick randomly so not always visually distinct; HEAD only shown when detached (otherwise checked-out branch label marked with *) not good at explaining what's going on beyond how it changes the pictures, so commit [--amend], branch, checkout, merge, rebase, cherry-pick all poorly explained; git clone done backwards to make the tut more straightforward (but at least they explain this); treats 'origin' as a keyword, not a naming convention; several exercises very contrived; introduces wierd quirks with limited use, seemingly because they're "cool"; covers fetch, then pull as "fetch (just this branch) + merge" (shows this, but doesn't comment on it); later points out the potential to pull a remote branch into a different local branch (i.e. not one tracking that remote branch).
+
+----------------------------
+
+Interactive sandboxes (interactive diagrams/command-line)
+http://git-school.github.io/visualizing-git/
+http://onlywei.github.io/explain-git-with-d3/
+
+   Similar to LearnGitBranching (simplified command list - not covering all commands/options); directed commit tree left-to-right (shows branches and HEAD labels but not explicit about what they are attached to - adjacent to a commit, not clear that HEAD is attached to the branch label), first ~7 characters of hash as commit IDs; explain basic commands, and have some simple example scenarios, but purely a how-to; ignores contents of commits (staging, merge conflicts, etc); warns about the danger of reset/rebase causing mismatches with remote repositories; branch deletion scenario has a un-named branch without explanation (inconsistent - other unreachable commits get greyed out, but fetched commits are too); demonstrates that fetch will grab all remote branches, but pull will merge only with the current branch (doesn't make a point of this, but shows it happening).
+
+----------------------------
+
+Git Immersion (tutorial with exercises, command-line)
+http://gitimmersion.com/
+
+   Aimed at beginners (with some command line experience); focused on "how-to" rather than "why-to"; individual "labs" very short; covers working directory/staging area/repository but only incidentally when covering staging control; limited coverage of commit tree (shows up when using "git log" in graph mode, shows branches, tags, and HEAD attached to a branch label); shows changing history (through "reset" or "commit --amend"), does show that commits are not completely gone, and makes vague mention of garbage collection; covers (with unnecessarily detail?) contents of .git directory; at one point (~lab 30) wants to compare merge and rebase, has to go through complicated rewinding to pre-merged state; introduces fetch, then pull as "fetch + merge" (without specifying that you need to have the correct local branch checked-out); covers remote repos.
+
+----------------------------
+
+Software Carpentry (9 tutorials, diagrams, exercises, command-line)
+http://swcarpentry.github.io/git-novice/
+
+   Aimed at absolute beginners (inexperienced with command line); good at explaining motivations (in general, and for different exercises); overly focused on individual files, which misleads about how git works; diagrams over-complicated, which could cause confusion; branches barely mentioned (vague/implicit), so detached HEAD and merges presented badly; warns against nesting repos; covers the three areas, but no concept of commit tree; introduces dangerous merge/push option (powerful but rarely used); suggests collaboration workflow (pull->change->add->commit->push) to reduce clashes (not really covering what "pull" does beyond a general sense of updating from the remote repository), and old fashioned 'house style', 'small commits often', and 'try not to work on the same thing at the same time' ideas; asks about why to use version control over backups, but hasn't introduced git's main advantages.
+
+----------------------------
+
+Think Like (a) Git - A Guide for the Perplexed (some diagrams, some command-line)
+http://think-like-a-git.net/
+
+   Explaining git to people who have started using it, but are confused by the more complex operations/commands; has links to other resources/tutorials; general humourous tone; based around the epiphany that all git commands are about graph manipulation - aiming to teach a conceptual understanding of git; show commit trees (sometimes directed left-to-right, sometimes GitX screenshots which are undirected bottom-up, both types show branches/tags but not HEAD); gives brief introduction to graph theory; mentions "pull" as a combination of "fetch" and "merge"/"rebase" (depending on configuration); points out that most visualisation tools will not display unreachable commits (i.e. those that will be garbage-collected); can trigger garbage collector with "git gc"; key concept is "REFERENCES [local/remote branches, tags] MAKE COMMITS REACHABLE"; uses the commits-as-save-games metaphor; mentions relative references, but doesn't explain them; suggests experimenting by imagining what will happen to the commit graph before you execute a command, then "...did it change in the way you expected? If the answer is YES: Congratulations! You just learned something! If the answer is NO: Congratulations! You're about to learn something!"; works through a couple of safe merge patterns (distinguished by confidence level), and how to use cherry-pick (and a couple of other commands) to explain what rebase does (with the usual "don't rebase public history" warning), but otherwise doesn't deal in how-to specifics; tendency to create short-term branches for ease of reference (e.g. naming the previous commit "savepoint" - unnecessary as can still use SHA/relative reference, but convenient); recovery help is very how-to, gives commands to run in particular situations, but doesn't explain what they do or why that is what you want.
+
+----------------------------
+
+The Git Parable (essay)
+http://tom.preston-werner.com/2009/05/19/the-git-parable.html
+
+   Aimed at anyone interested in git; gives background of why it might be set up the way it is; covers both the three areas and the commit tree; purely the concepts behind the way git works.
+
+----------------------------
+
+A Visual Git Reference (tutorial, diagrams, some command-line)
+http://marklodato.github.io/visual-git-guide/index-en.html
+
+   Explaining what various common commands do, especially useful for comparing different options with the same command; shows both the three areas, and the commit tree (directed, left-to-right, labelled, HEAD attached to branch label); descriptions sometimes misleading/poor - introduces some things without explanation/motivation, so they're treated as either magical incantations, or things the reader will have to figure out for themselves; merges treated overly simply (barely mentioned, no mention of the possibility of conflicts); good build-up from cherry-pick (of a single commit) to rebase (as a sequence of cherry-picks); only working with a single (local) repository.
+
+----------------------------
+
+Git for Computer Scientists
+http://eagain.net/articles/git-for-computer-scientists/
+
+   Covers the basics of internal storage (commit refers to tree (DAG) of blobs (files)); commits point to parents, commits lost (i.e. eventually garbage collected) if nothing points to them; can have multiple initial commits (e.g. from combining two projects); describes branches as post-its stuck to a commit that move when you make a new commit on that branch, remote branches move when updated from the remote; HEAD attaches to a branch label (doesn't cover detached HEAD); describes tags as additional nodes (as have additional data associated) with their own post-it; shows commit trees (bottom-up, directed, labelled but without HEAD, single sequential letters as IDs) demonstrating some operations (commit, merging your branch with remote branch, rebase); advises against rebase once commits are shared; doesn't cover merge conflicts.
+
+----------------------------
+
+Learn the Basics of Git in Under 10 Minutes (tutorial, diagrams, command-line)
+http://www.freecodecamp.org/news/learn-the-basics-of-git-in-under-10-minutes-da548267cc91/
+
+   Admittedly clickbaity title; starts with giving the motivations for version control systems (track history, switch to previous version(s), find out who made each change), points out git is one of many, and has many clients (they focus on GitHub); biased assumption - defines a repository as a collection of source code; distinguishes the three areas - confusing workflow diagram showing how stuff moves between working directory, staging area, local repository, and remote repository, via the add, commit, push, fetch, merge, and pull commands (arrows not clearly associated with commands), implies the local repo is called HEAD and the remote is called MASTER; says files can be staged, modified, or committed (ignoring the possibility of being untracked); explains the commands from the diagram (see above), but misleading about what push/fetch/merge are doing; describes basic setup (username/email config, mentions setting up SSH key for GitHub); command-line listings formatted wierdly (not splitting commands onto new lines properly, some non-command-line things formatted the same way); immediately introduces reset as a way to remove the most recent commit (using HEAD~1) without explanation; notes how to revert to the last commit version of a project/file, but not any further back; mentions git log; implies when you save a file it automatically updates your local repository, but later notes you should add, commit, and push if you want those changes to appear on GitHub; describes cloning a remote repository, but that you cannot push to it if you are not included as a collaborator - instead you have to send a pull request; says to pull regularly to keep up to date with changes others have made; mentions that pull is fetch + merge, and it merges with the current branch (though it hasn't explained what branches are), suggests to use fetch if you're not sure whether the other changes will break what you're working on; covers .gitignore.
+
+----------------------------
+
+Version Control for Designers (tutorial, diagrams, command-line)
+http://web.archive.org/web/20150301060509/http://hoth.entp.com/output/git_for_designers.html
+
+   Aimed at non-programmers who are new to version control; covers general concepts/motivations; covers basic workflow, giving semi-mystical commands for the various actions; describes cloning a GitHub project, says latest version is referred to as HEAD (not completely wrong, but misleading); covers basic staging, and diff (showing that you can send the diff to someone as a patch to apply); not using -m, assumes default text editor is one the user is familiar with; suggests keeping commit messages as concise descriptions (says they "are an art form, much like haiku"); says push (and pull) by default update all branches common to the local and remote repositories; mentions .gitignore, but not how to use it; treats branching (well motivated - a way to isolate a particular feature) and merging as like cloning and pushing but happening in the same directory (simplified for non-technical users, but very much not true); describes updating current branch from remote master via "git pull origin" and "git merge master" (which I think pull does anyway - or maybe it's not merging the changes into master because you're checked out elsewhere? generally seems wonky); introduces "source:destination" parameter for push (including pushing nothing to delete the destination branch), which seems dangerous; describes using reset and checkout to rollback to staged/previously commited versions (finding commit IDs using git log, but claims IDs and branches are effectively the same thing - right, but confusing); shows commit tree (using gitk - bottom-up, undirected, labelled but without HEAD); recommends committing often (cf. save often), pulling often (keep up to date with collaborators), and taking care with checkout/reset (implies reset commits are gone forever).
+
+----------------------------
+
+Trailhead GitHub module (6 tutorials, diagrams, screenshots, command-line)
+http://trailhead.salesforce.com/content/learn/modules/git-and-git-hub-basics
+
+
+Learn Why Version Control Is Important For Team-Based Development
+
+   General explanation of the value of (distributed) version control systems; points out that version control is one of many types of collaboration tool; diagram that appears to represent a commit tree (nodes are stacks of files marked with the ++-- that git uses to indicate changes), but unlabelled and undirected, and branches are different colours, but none of this is explained (seems to be copied from git-scm.com); comes across a bit like advertising for GitHub.
+
+
+
+Learn Where GitHub Fits In The Development Lifecycle
+
+   Some biased/misleading definitions given (e.g. "Repositories: A collection of source files used to compile your project."), seems to be making assumptions about what sort of projects people are using git for, and what their workflow is (biased towards Salesforce developers); keep shoving in references to "Salesforce" (their own collaboration environment which integrates tools like git); uses lots of jargon/acronyms without explanation.
+
+
+
+Discover Collaboration Within GitHub
+
+   High-level listing of GitHub features (mentioned, only vague sense of why you might want to use them, but no explanation of how to do so), e.g. user/team permissions; some screenshots of GitHub; wierd perspective on "pull requests" as "a comparison between two branches" (though this seems to be how GitHub presents them), rather than "proposal for merging" - shows proposed changes, offers ability to discuss, test, modify, etc.
+
+
+
+Work With The GitHub Workflow
+
+   Describes a basic workflow (branch, modify, pull request, discuss, merge); doesn't really cover what branches are; meaningless diagram at the top; some GitHub screenshots and terminal listings (formatted like source code, complete with line numbers - easier to copy/paste, but less readable); covers how to create a GitHub repository, and clone it to your local machine; describes the local/remote distinction fairly vaguely, still using a lot of jargon (e.g. describing the public repository as the group's "source of truth"); introduces several commands, but purely as mystical incantations (type this and it will work, little/no explanation); tells to install git (near the start), then discusses configuration _after_ already cloning the remote repository; mentions newline issues when working between win/*nix systems; section heading "Track a File with GitHub", but starts off with local git repository; talks about HEAD moving when checking out a branch, but not well expressed (though says will come back to later); distinguishes the three areas (working directory, staging area, commit history), with diagram that gives them confusing icons (working->pencil - edit?, staging->camera - snapshot?, history->rewinding clock); brief overview of the discussion options within pull requests; vague presentation of merges, doesn't really explain what they are; mentions merge conflicts, but only implicitly (as part of "issues resulting from the merge"); suggests deleting branch (on GitHub) after it's merged, then pulling from local repository to update master (doesn't mention if local branch gets deleted, or if you need to do that manually); says pull is a combination of fetch and merge, but doesn't explain what either of those do (other than the general sense of updating from the remote).
+
+
+
+Work With Teams In GitHub
+
+   Meaningless diagram at the top; some GitHub screenshots; suggests having a clear branching strategy, and recommends short-term branches for developing features etc (try to keep the history simple); long-term branches are advised against, unless there is a good reason (possibly suggesting GitHub isn't a good interface for dealing with branches?); be intentional about strategic decisions (naming conventions, who issues get assigned to, how to manage pull requests, etc); gives a workflow for dealing with merge conflicts (again, lots of mystical incantations); says conflicts can sometimes be done on GitHub, but usually done with local repository (suggests GitHub not great at dealing with merge conflicts?); briefly covers advanced staging (add --patch), suggests making each commit a small, logical unit of change (without explaining what that means).
+
+
+
+Work With Your History In Git
+
+   Brief overview of git internal storage, overly focused on files; diagram of (simplified) internal storage of a commit with all object sizes listed as "size"; claims file refers to previous version as parent (as far as I can tell, it doesn't); only now mentions that commits refer to their parents, and that this is important for branching/merging; gives some useful "log" and "diff" options; diagram of "log" output showing branching/merging; says "diff" defaults to comparing the latest commit, yet default compares working directory and staging area (as diagram shows - gives options for comparing working/staging, staging/history, and the-difference-between-working-and-staging/history <- badly positioned line, command actually compares working/history); terminal screenshot showing example of "git show" output; says that "undo" commands (i.e. history rewriting) "destructively modify the commit ID", then immediately says the IDs are immutable; says only "git revert" is safe to use once commits have been shared; suggests "commit --amend" mainly for changing message, offhand remark that can also add staged changes; points out "reset --soft" is like the first step of doing a squash, as the changes from all the reset commits get put into the staging area; claims "reset --hard" destroys the commits, that they are completely removed and unrecoverable (writer either doesn't know how rewriting history works, or they're trying to simplify for new users); distinguishes recursive merge and fast-forward merge, showing diagrams of the resulting commit tree for each (left-to-right, directed, labelled, unclear HEAD attachment); introduces "rebase" as a way of turning a recursive merge into a fast-forward merge; talks about rebase being useful to modify the way your commit history looks (though does warn about rewriting history - in non-specific terms), which is almost meaningless as they've barely shown the commit history (though it's only mentioned in passing, i.e. as something the reader might want to look into further if they're interested).
+
+----------------------------
+
+Ry's Git Tutorial (13-part tutorial, diagrams, command-line)
+http://web.archive.org/web/20161121145226/http://rypress.com:80/tutorials/git/index
+also available as epub
+http://www.smashwords.com/books/view/498426
+
+
+   Covers general history/motivations behind version control; clear, simple diagrams; points out the value of understanding git at the command-line, even though there are many good (GUI) tools built on top of it; tutorial designed to be worked through (doing it, not just reading it); unfortunately only available through the internet archive, so pages are a bit slow to load, and some linked files/images are gone; sometimes introduces new ideas in the "Conclusion" section of a tutorial, when it seems designed to be a summary.
+
+
+The Basics
+
+   Covers creating (init), configuring (config), committing to (add, commit), and viewing (status, log) a repository; using a simple website (html & css) as the example project; mentions master branch, and ignoring files, as things to come back to later; introduces staging as a way to choose what files to include in a snapshot in order to represent a meaningful change; shows (via diagram) the three areas (as "files", "snapshot" and "history"), comments that nearly all git commands manipulate one or more of these three components, so understanding them is an important foundation; assumes user is comfortable with the default text editor (opened by commit); mentions SHA hashes as unique IDs, and that they will be expanded on later; shows that you get an "Author: unknown" on the first commit, then shows how to set username and email; shows commit trees left-to-right, directed, labelled but without HEAD (checked-out commit is highlighted), branch labels different colours, but commits all grey; initial commit tree has no labels (not covering branches yet).
+
+
+Undoing Changes
+
+   Shows how to find and checkout a previous version (second of three commits) by ID; notes that it causes "detached HEAD", which will be covered later; shows future commit greyed-out as though it was no longer reachable (as log, by default, only shows the history of the current (second) commit, so it appears the third commit is gone); get back by checking out master branch; has missing image - the same history of three commits, with the third one highlighted red; uses annotated tag (with a message), leaves implicit that it cannot move; uses revert (says its good for collaborating because it doesn't alter history) to undo an experimental commit (fourth) - notes that commits three and five contain the same snapshot; uses "reset --hard" (reset all tracked files to the last commit) and "clean -f" (forcibly remove all untracked files - doesn't explain command option) to get rid of uncommitted experiment, warns to take care as what they delete is gone forever.
+
+
+Branches, Part I
+
+   Presents branches as a better way of trying experimental changes than copying your whole project back and forth, or the undo approaches described in the previous section; now showing branch labels on commit tree diagrams; points out only one snapshot/branch can be checked out at a time; detached HEAD now means the highlighted commit is not the most recent of its branch (still a simplification, but maybe they'll come back to it); claims you can't add new commits unless you're on a branch (not true, but does prevent detached commits); good demonstration of branches diverging (and how git log only show the current branch history); requires "git rm" of old name and "git add" of new name to rename file (have only used "git add" with explicit filenames so far); shows fast-forward merge (master adding branch), and says can then delete branch (git will warn if it's not merged); has only talked about branches conceptually (implies they're equivalent to making a copy of your project directory), not about implementation, so can't really explain fast-forwarding.
+
+
+Branches, Part II
+
+Notes that we ascribe significance/meaning to branches, but git doesn't (a branch is just a branch - master is only special because it's the default); it's good to think of small, short-lived branches as "topic" branches (quickly added, then integrated once it is finished); notes that once branches have diverged, can no longer fast-forward merge (can't get from A to B without backtracking), so must instead combine the branches, and there may be merge conflicts requiring manual resolution; longer-lived branches are called "feature" branches (new addition developed in parallel); good rules of thumb - 1) make a new branch for each major addition (gives safe separation for testing etc), 2) don't make a branch if you can't give it a specific name (should be clear about its purpose); three-way merge creates a new commit with both branch histories as parents; notes that git uses the two branch tips and their common ancestor to generate the merge commit, but doesn't explain; now introduces "commit -a", warns it doesn't include untracked files; notes the freedom of being able to switch branches quickly; good workthrough of a simple merge conflict; says a deleted (-D) experimental branch is "lost forever" (but still accessable until garbage collected); notes that history shows where most merges happen, but not fast-forward merges; can use other permanent branches (besides master) for more complicated release/version tracking.
+
+
+Rebasing
+
+   Bases argument for rebasing ("our repository's history is kind of messy") on the non-graph log output being unclear (diagrams showing the commit tree are easy to understand); want the log history to read as a clear progression of features (conceptual history vs chronological history); demonstrates rebase as moving commits to give them a new parent/history; says good because can do fast-forward merge when integrating feature into master, and integrates current state of master into feature branch without a merge, but ignores that still have to deal with any conflicts when rebasing (same process as with merging - fix flagged files manually - but may have to do several times, as rebase iteratively adds the commits being "moved"); doesn't note the changed IDs of the rebased commits; works through an interactive rebase (showing combining small commits into one meaningful commit, editing the contents of a commit - similar process to resolving rebase conflict, but use "commit --amend"); use "rebase --continue" or "rebase --abort" when in the middle of a rebase (e.g. interactive, or with conflicts); does note changed IDs with interactive rebase, implying plain rebase did just move commits; warns again about losing commits forever (if ommitted from interactive rebase); says rewriting history is dangerous with public repositories (to be explored later); notes "commit --amend" useful for fixing "premature" commits; notes that rebasing means you're focusing on what you've done, but losing how you progressed; points out rebase/merge is a contentious topic, and that which to use probably depends on the situation (pros and cons to both sides); notes that "merge --no-ff" will create a new merge commit (with two parents) even if fast-forwarding is possible.
+
+
+Rewriting History
+
+   Introduces "checkout -b"; demonstrates a "bad" commit (one that did multiple, unrelated things) - a contrived example, given the simplicity of the tutorial project (website), of adding two new pages at once; demonstrates replacing a commit during an interactive rebase, uses reset --mixed (the default) to keep the changes in the working directory, but reset the staging area, then stages and commits new version before continuing the rebase; introduces ~N; slightly confusing diagram of "current" status (mid-rebase, after the reset) - how do you notate these sort of "in-between" states?; does a hard reset to create a "dangling commit" (ones previously described as "lost forever"), then shows how to retrieve (find using reflog, checkout by ID, create new branch); shows some other log options to limit output (by number or branch) - introduces ".." syntax (i.e. "A..B" displays the commits from B's history that are not in A's history), and "--stat" (show per-file change stats); finally notes that branches are pointers to commits (previously only implicit via diagrams), which makes git efficient at creating and updating branches (just moving pointers).
+
+
+Remotes
+
+   Simplifies (reasonably) the idea of remotes and remote tracking branches as "repositories that are not your own", and "representing a branch on someone else's repository" respectively; using squares to represent commits made by someone else and fetched from a remote (slightly misleading, they're normal commits, just with a different author); slightly confusing concept of "Just as branches are an abstraction for the working directory, the staged snapshot, and a commit history, a repository is an abstraction for branches."; shows how to connect a remote repository (just a reference to the location of another repository); notes that you have to manually fetch to get updates from a remote; missing image (same as the previous, with the "mary/master" square commit highlighted rather than the "master" round commit, omits tracking branch labels - notes "Local Branches Only"); covers fetch and push, hasn't mentioned the pull command, though occasionally talks about pulling changes; warns about pushing allowing you to create a local branch in another repository (rather than a remote tracking branch), and advises against it (don't mess with someone else's stuff) - designed for updating your own public repository from your private one; shows how to push tags; assumes workflow/team configuration - branches are for topics, remotes are for people.
+
+
+Centralised Workflows
+
+   Missing several diagram images (centralised workflow ("Our Repo" and "Mary's Repo" that both interact - two-way arrows - with "Central Repo"), pushing master to the central repository (before and after, shows "origin/master" catching up to "master"), squashing a public commit (before and after, squashing last two commits, creates new branch - from third commit back - for "master" with new commit but leaves "origin/master" with old commits), before publishing Mary's CSS changes (comparing our and Mary's repositories, hers has "master" ahead of "origin/master" due to new update - misleading due to mis-alignment of old commits, makes our repo look more up-to-date than Mary's), centralised workflow with many developers (similar to above with more repos interacting with the central repo - "John's", "Sam's", and "Kim's")); with a two-person team, can just push/fetch back and forth between their repositories, with a larger team, should have a single central repository (so don't have to go through a list of people to fetch from every time you want to sync); central repository is often online, but hosting providers all work slightly differently, so tutorial has it on the local filesystem for simplicity; initialises the central repository "--bare" (i.e. without a working directory) as it's for sharing, not development; shows how rewriting history after sharing it gets messy (so don't do it); shows the "make changes, push to central repository when complete, if unable to push then fetch and rebase first" workflow.
+
+
+Distributed Workflows
+
+   May not want everyone to have access to the central repository - others make their changes public, you can fetch them into a private repository and, if you so choose, integrate them into your work and update your public repository; tutorial works through integrating a pull request on Bitbucket; mostly stuff done before, but showing how to with Bitbucket (create an account, initialise a (bare) repository, connect it as a remote, and push to it, clone as another user, make changes); generally, repository access via "http" is read-only (can fetch but not push), "https" is required to push, and will have to enter credentials (username/password); always check third-party contributions before merging them (your collaborators should be able to trust stuff in your public repository, and you generally trust your co-workers, but be very careful with pull requests from unknown sources).
+
+
+Patch Workflows
+
+   Shows how an outsider can also contribute a single commit as a patch; missing two diagram images (adding two commits on the pink-page branch ("pink-page" two commits ahead of "origin/master" in Mary's repo), the patch workflow (cycle: maintainer (us) applies changes to our private repo; pushes those changes to our public repo; Mary pulls changes from our public to her private repo; she makes her own changes, and formats them as patches; she emails us the patches, for us to apply)); creates an email containing the diff information for the specified commit (just a text file, easy to distribute); with multiple commits, will generate multiple patch emails; git can send emails for patches, but require configuring relevant settings; like with pull requests, contributer should delete their commits and pull the "official" versions from the central repository (as they may have been adjusted, and it keeps everyone in sync); patches more convenient than pull requests for small and/or one-off changes (e.g. simple bugfix).
+
+
+Tips & Tricks
+
+Listing a bunch of useful utilities; "archive" creates a zip/tar of the current state (i.e. checked-out commit), only tracked files, no ".git" etc; "bundle" creates a single file (including the entire repository) that can be a backup, or can be cloned; ".gitignore"; "stash" to store the current state of the working directory and revert to the last commit, can use to save work to come back to later, or to move work between branches (no mention of it being a stack, multiple stashes, how to remove a stash); gives an example of using a hook (shell script) to publish the website whenever the central repository is updated (notes this is only a teaser, and hooks are a vast topic); "diff" to show changes between working and staged (default), staging and last commit (--cached), or any two commits (ID..ID); "reset" (i.e. unstage) and "checkout" with a file specified, no change to branch/HEAD pointers; aliases, to shorten commands (e.g. "co" for "checkout"); notes they have just scratched the surface of most of these utilites; reminds that git is a tool, and as such should always be making it easier to do things, not harder.
+
+
+Plumbing
+
+   Covering the internals, using "git cat-file"; commit lists file tree, parent (commit), author & committer (with email addresses and timestamps), and message; everything uses SHA-1 for IDs; file tree stored as binary, so instead need to use "git ls-tree" to view, much like a directory listing, blobs for files, trees for subdirectories; filenames stored in the tree, not the blob (it records content only), how git can easily tell if a file gets renamed; only stores blobs once, can reference from several trees; tags store commit ID, name, author, timestamp, and message; branch is just a reference to a commit, HEAD is (usually) a reference to a branch (in "detached HEAD" state it is a reference to a commit); "git gc" packs object files (several into single, smaller, file that is quicker to access) and removes dangling commits; shows the "plumbing" commands for staging and committing (will likely never use, but interesting to see what's going on underneath); reminds that git is a tool, and won't magically make up for poor conventions within your development team.
+
+----------------------------
+
+Git Succinctly (6-part tutorial, diagrams, command-line)
+http://code.tutsplus.com/series/git-succinctly--net-33581
+also available as pdf
+http://www.syncfusion.com/ebooks/git
+
+
+   Explains how distributed version control is different from centralised, and how git benefits from this (less network traffic, everyone has a full backup, can work offline, etc); distributed structure meant git had to be good at merging; describes the three areas (working directory, staging area, commit history), and a fourth ("development branches") which is really part of the commit history; implies advanced staging in description of the area (talks about grouping related changes); says commits are "safe" - git will never change them, but you can rewrite history; diagram of three areas has mini commit tree (top down directed unlabelled, branches different colours, arrows point wrong way (parent -> child)); covers basic install for Windows, recommends official website for more detail; covers config of user/email, preferred editor (only shows one option - gvim), and aliases; shows init and clone, implies clone requires ssh connection (doesn't cover other forms of repository address).
+
+   Distinguishes git commits as snapshots from svn or cvs which store diffs; talks about using staging to build logical snapshots (rather than chronological); uses "add <file>" to stage and "rm --cached <file>" to unstage (and to stage the deletion, but doesn't really explain what that means); uses diff and status to help prepare snapshots by examining changes, but says need log to examine commit history; commit created from contents of staging area, has SHA-1 ID of entire contents (describes only as a unique ID/checksum; doesn't mention parent reference(s)); covers commit message convention (summary, blank line, detail), says if you can't summarise a commit then you're jumbling together unrelated changes; covers some simple log formatting (--oneline, --stat (mistakenly only has single dash), ".." notation), recommends gitk for visualising history graph; briefly introduces (annotated) tags (creating and listing).
+
+   Distinguishes different forms of "undo" (in working directory, in staging area, deleting a commit, supercede a commit), says has different tools for each (though uses "reset" for several); uses "reset --hard HEAD" and "clean -f" to revert changes in the working directory and (force) delete untracked files; uses "checkout HEAD <file>" to revert an individual file (notes can give any commit reference, but says not to do this with "reset" (explained later)); uses "reset HEAD <file>" to unstage a file (distinguishes from --hard, but doesn't name as "mixed"); now shows commit tree as left-to-right directed unlabelled (current commit highlighted); uses dashed arrows to indicate changes (e.g. reseting from one commit to another); warns "removing" a commit has messy consequences for multi-user scenarios (hence why there is the option to supercede); uses reset to move HEAD back to a previous commit (implies it gets deleted), but says only to do with private history, not shared; uses revert for public history (undo the changes introduced by the specified commit); also shows "commit --amend" for correcting most recent commit (again, warns against rewriting shared history).
+
+   Introduces labels to commit tree (though without HEAD), each branch a different colour, but not clear which branch is checked out; likens a branch to making a new copy of the complete working evironment (repository and all); allows parallel development (notes that is important for collaboration workflows); notes branches are just pointers to commits, so branch manipulation much more efficient than in other version control systems; covers creating, listing, and deleting branches; shows new commits only advancing the checked-out branch; mentions how branches stored internally; distinguishes "branch -d" (delete) and "branch -D" (force delete, recommends care), notes git will warn about deleting unmerged branches if using -d; uses checkout to switch branches (notes will lose uncommitted changes in working directory); notes can checkout via commit ID (rather than branch name) but this means detached HEAD, so will lose any new commits when you switch back to a real branch; uses "checkout -b" to resolve being in detached HEAD.
+
+   Shows merging a branch into master, distinguishing "fast-forward" and "3-way" merges (same command - git chooses which to use, based on graph structure); fast-forward is easy (just move "master" pointer), justifies separate branch as may want to delete (if feature doesn't work out) or restructure (i.e. rebase) (to tidy up feature before merging); must use 3-way merge if both branches have added new commits (can't fast-forward without backtracking); notes new merge commit has two parents (named because looks at three commits to make the merge commit, doesn't specify what the third is: their shared ancestor); works through a merge conflict.
+
+   Describes some workflows/ways of categorising branches; notes git doesn't care, a branch is a branch, meaning is applied only by the user(s); distinguishes permanent branches (which are used to show e.g. release history) from temporary branches (used to develop new features, or fix bugs); demonstrates rebasing (implies moving) a feature branch (to keep it updated with the main development) - doesn't mention possibility of conflicts; notes that repeated rebasing is cleaner than repeated merging (of master into feature), but doesn't comment that you no longer can see when feature was first branched off; introduces "rebase -i" to clean up a feature branch (demonstrates squash), makes development look less haphazard; warns that commits are not moved by rebase, but replaced (says old ones are destroyed) by new ones (different ID even if same content), so again it's rewriting history which should be avoided when sharing history.
+
+   Simplified idea (remote is a repository that isn't yours), notes can be anywhere (mentions http, ssh, file urls) provided you can access it (e.g. via network/internet); recommends branches to separate features, repositories to separate users; uses "git remote" to list and manage remotes (notes "clone" automatically creates one called "origin") - just bookmarks to remote locations; notes usually use secure access for contributors, plain http for example should be read-only; introduces remote branches (aka tracking branches) which represent a branch in a remote repository); download new commits from remote with fetch, notes have to sync manually (doesn't keep up to date); cannot checkout remote branches (will be detached HEAD), so should only use for viewing what is there; after fetch, uses ".." syntax (e.g. "git log master..origin/master") to see if anything in origin/master that is not in master; after fetching, can choose to merge/rebase in order to update your local repository; fetch + merge (with current branch) common, so "pull" does that (also has "--rebase" option); shows push for sending updates to a remote, warns that pushing a branch will (if necessary) create a new non-tracking branch on the remote (warns against messing with others' repositories like this), whereas fetch creates a tracking branch for any new branches on the remote.
+
+   Can designate one git repository to be the central/main one, but this meaning is only for the users (git doesn't distinguish); good idea to make central repository "bare" (i.e. no working directory) as it's only interacted with via push/fetch; "centralised" workflow has many users all with local repositories that point to the central repository as a remote; notes problem of conflicts (diverging history so cannot do fast-forward merge) when pushing to a central repository (must fetch, merge/rebase, then push); doesn't scale well to large teams, so instead there is an "integrator" workflow; every user has a private and a public repository, only one/some users can write to the central repository (but everyone can read from it - needed for them to fetch updates to stay in sync), other users (even outsiders) can offer changes which an integrator grabs from the other users' public repository, checks (e.g. to make sure no malicious code, especially important if from an outsider) and then adds to the public central repository.
+
+   Notes git was designed as a collected set of tools to enable workflows; makes it very versatile and efficient; reminds that having a clear plan is important, as no tool can fix bad practice.
+
+----------------------------
+
+Backlog Git Tutorial
+http://backlog.com/git-tutorial/
+
+"Backlog" is a hosting provider. Includes a (limited) reference of common commands.
+
+
+Learn Git Basics
+
+   Gives a good motivation for using version control; distinguishes the three areas (repository, working tree, index), though describes the index confusingly/inconsistently (adding/staging/registering files, says the index is comparing the other two areas); similarly describes three states of files (modified, staged, committed), though diagram also shows "untracked"; diagram suggests deleting a committed file removes it entirely, but older versions will still be in the repository; simplified description of a remote repository as being shared, a local repository as being private (though says can share local repositories, it works better with remotes); so far, while occasionally mentioning commands, is just describing the concepts (i.e. what you're trying to do); shows commit history (undirected, left-to-right, timestamps on commits, no branches, each commit has a "commit" label), then mentions hash just as unique ID; recommends making each commit a set of logically-connected changes with a meaningful message; introduces revert, reset, and "rebase -i", says to use revert if changes are shared to avoid getting out of sync with remotes; demonstration of revert has commit tree left-to-right, unlabelled, with single letter as ID, and commits point the wrong way (i.e. parent -> child); describes reset as for discarding commits you no longer need (implies they get deleted), describes "going into reset mode" as though it were a interface change rather than a flag attached to the command; diagram now introduces HEAD and master (HEAD pointing to master, master pointing to commit) without explanation, has commit pointing (separately) to index and working directory, generally poorly explained; introduces push and pull to sync history with a remote, doesn't really explain what's being synchronised; implies merge will update local with remote changes that are preventing you from pushing, but diagram (undirected, single letter and timestamp as ID) looks more like a "git pull --rebase"; gives simple example of resolving merge conflict (described as between two branches, a local and a remote in this case); covers rewriting history through "commit --amend" (way to change the previous commit), rebase (way to change an earlier commit, or to combine commits), cherry-pick (to move or copy a commit from another branch) and "merge --squash" (to add a whole branch as one commit) which have the only diagrams that actually branch (the side branches are a different colour without explanation); often mentions branches, but never defines them; commit tree diagrams extremely inconsistent (whether or not have arrows - those that do point the wrong way, whether commits have IDs and what they are, whether commits are labelled) and unclear, e.g. some labels are meta (saying things like "commit to be undone").
+
+
+Learn Git Collaboration
+
+   Finally introduces branches, motivates by separating collaborators; fairly vague so far - still talking concepts rather than details; notes that changes in another branch will not affect your branch unless you pull (which is misleading - only true for if the other branch is on a shared remote); notes common practice of branches relating to tasks/features; notes branches are just pointers to commits; says HEAD points to the current active branch - doesn't mention detached HEAD; introduces checkout, and (reasonably well explained) relative references (~N and ^N); introduces stash as a "drawer" to put aside changes while doing something else; when discussing pull, uses "upstream" and "fast-forward" without explanation (though it can be assumed from context/diagrams); shows "origin/master" on the remote, pointing to the current position of "master", rather than on local where they last saw the remote master; notes that if both local and remote have made changes, pull will merge them automatically (though may involve dealing with conflicts) - this diagram has origin/master properly located; introduces fetch for collecting but not merging changes, implies pull does fetch and merge "simultaneously"; notes push will fail if needing a non-fast-forward merge, will have to pull first then push; advises not to "overwrite" or "change" (odd choice of verbs) commits that have been shared, as it causes desynchronising with other repositories; mentions tags without explanation; diagram showing a possible workflow for branches that is a little hard to follow (commit spacing seems to be ad hoc, arrows point wrong way and don't fully reach targets, branches shown by division of space, tags shown but look identical to previous instances of branch labels - based on GitHub "insights > network" diagram), have three main branches for integrating features (develop), preparing/testing possible releases (release), and actual release versions (master); points out need to have a strategy that works for your team; recommends rebasing feature/topic branches when integrating to stop the history becoming complicated; finally explains merge types, points out that a non-fast-forward merge (even a forced one) maintains the structure of the branch being integrated, giving a clearer picture of its development (assuming you haven't previously rebased it); describes tags as branches that do not move, and that they can have extra annotations (e.g. comments, timestamp, who tagged, etc); approves of the addition of pull requests (not a git feature, but common in hosts like GitHub) for making code reviews easier (can track each request, converse about it, post tests and corrections, etc), shows the basic pull request workflow (talks about pushing the change then creating a pull request - it's not clear where pushed to, or where pull request is made to).
+
+
+Work With Git
+
+   Designed as the "intermediate" tutorial, building off the first section. First part of this section (installation, remotes) covers how-to for TortoiseGit on Windows, SourceTree on Mac (screenshots often don't match instructions), or command-line (command-line listings often word-wrapped badly);  all of the programs employed (TortoiseGit, SourceTree, gitk, "git log --graph --oneline" (though later shows "--decorate" option which shows full commit ID, author, timestamp, and labels)) display the commit tree bottom-up, undirected, with commit message; only SourceTree and "git log" show (abbreviated) commit IDs; most of this section just uses command-line; some parts (remotes, pull requests) use Backlog's git host (self-advertisement).
+
+   Walks through basic git installation (vague/confusing comments for command-line install - gives both Win and Mac instructions, but scope not very clear); describes setting username/email (and default editor and some charset stuff for command-line); TortoiseGit doesn't seem to separate staging and committing; command-line first presents "git add .." (which presumably would add everything in the parent directory, though may be a typo), then suggests "git add ." for adding all changed files, uses log or gitk (unrelated screenshot) to show commit history; demonstrates creating an online repository and adding it as a remote (notes "origin" as a default name); notes using push -u means you don't need to specify the branch next time, though without explaining why not; shows cloning, pushing, and pulling (largely how-to); shows that push fails if the local repository is not up-to-date with the remote, resolves by pulling then (manually) resolving merge conflict; diagrams still inconsistent with presentation of branch labels, one showing switching branches has two HEAD pointers; notes checkout -b option to create and switch to a new branch; shows deleting a branch (only covers "-d", doesn't mention git complaining if unmerged); shows diverging branches, then merging (with conflicts); does a hard reset to undo the merge in order to demonstrate rebasing instead; shows resolving conflict in a rebase, followed by using the "rebase --continue" command; shows adding and deleting tags, both lightweight and annotated; tags without a message of their own take commit's message; diagrams show tags attached to HEAD rather than to the commit; using simple pre-prepared repositories to demonstrate "commit --amend", revert, reset, cherry-pick (with conflict), "rebase -i" (squash, edit with "commit --amend" followed by "rebase --continue" - notes that multiple edits dealt with one at a time), and "merge --squash" (inconsistencies in commit IDs between instructions, command-line listings, and diagrams); shows previous HEAD location (e.g. before a reset or rebase) stored in ORIG_HEAD, so can for example undo a reset by "git reset --hard ORIG_HEAD"; some parts start off referring to "the repository", but (especially if the sections are not done in order) it's not clear which repository is referred to (local or remote? what history?); last part (pull requests) suddenly working with javascript, when all previous examples had been plain text; demonstrates pushing a new branch to a remote repository, then creating a pull request to merge it into the master branch (makes it confusing why it's called a "pull" request and not a "merge" request); can assign a user to be in charge of the request, as well as notifying other users; can make general comments, or attach them to particular lines/files in the request (can also set to notify particular users about a comment); recommends dealing with merge conflicts (within a pull request) manually within your local repository (i.e. if conflict occurs, pull/fetch from the remote, merge locally, then push).
+
+----------------------------
+
+Tutorials Point Git Tutorial
+http://www.tutorialspoint.com/git/
+
+   Aimed at beginners to version control, but who have done some software development; expects a linux command-line environment; seems to be based on older version of git - output messages are less informative; written by Indian english speaker(s) - occasional wrong words or odd phrasing. Sometimes use command options without explanation.
+
+   Introduces version control, distinguishing centralised and distributed types and advocating the latter (everyone has a full backup, don't need to be online to work with); notes the efficiency of git (minimal storage, fast branching, limited network use); begins by describing/defining some concepts, no how-to yet; describes SHA hashes as IDs for "objects within [git's] database", but only from a security (checksum) perspective; commit workflow implies need to add, commit, and then push before something is permanently stored; distinguishes the three areas (working directory, staging area, repository); notes git stores everything by content as blobs (files) within trees (directories); describes commits as linked-list nodes that point to their parent (to allow history traversal), but does mention merge commits as having multiple parents; claims "every" branch is referenced by HEAD (which tracks the latest commit), instead of just the current branch, notes it as a pointer and shows how it's stored in ".git/refs/heads/", but new users may not know what a SHA-1 hash looks like at this point, so it doesn't mean much; describes tags as immutable branches (but as branches are not specified as labels that doesn't make sense); describes clone as creating a repository rather than copying one; many concepts likened to their Subversion equivalents.
+
+   Covers installation and config (username/email, colour, default editor, merge tool, default pull behaviour, line endings); odd to cover setting merge/rebase pull default when haven't yet explained what either means - also doesn't show line ending config until near the end of the tutorial, when it seems something that should be done upfront (you already know what OS you are using); describes overall "life cycle"/workflow, then later gets into command specifics; given workflow implies cloning a repository for every change you make; diagram is slightly confusing mix of "data moving between locations" and flowchart, with remote repository as the traditional cylinder, but local repository as a cloud; covers setting up a bare central repository on a server (odd place to start for people new to git), including creating a specific user for it (presumably for all collaborators to login as when pushing/pulling?), and generating ssh keys; inits a local repository, then adds the central one as a remote; implies push will update any branch with the same name (whether linked or not); shows another user cloning the central repo and adding a new file; implies you shouldn't commit code - at all - until it's tested and working; significant typo ("stash" instead of "staging"); shows how to examine what changes have been made (by a particular commit - "git show <ID>", or since last commit - "git diff"); shows how to correct a mistaken commit (with "commit --amend"), but states the command is "git amend" (which doesn't exist); listings (code/command-line) don't always match with text; has first user (who 'init'ed the repo in the first place) clone the central repo before making changes; second user now cannot push their change because would cause a non-fast-forward merge (doesn't explain what this is, but does express that the repositories are out of sync, and they don't want to lose anything); shows using pull followed by push.
+
+   Covers stashing partial changes till later (notes stored on a stack, use "stash pop" to get back), shows how to list; shows "git mv" operation - mainly been using "git add <file>" so not clear how to note moved files; similarly, uses "commit -a" to notice renamed file, and "git rm" to remove a compiled binary that shouldn't be tracked (though doesn't cover .gitignore); shows using checkout to undo changes to/deletion of a file, whether staged or not (assumes you want to completely undo, not just unstage); compares reset --soft, --mixed (default) and --hard (though implies --hard deletes everything in the staging area and working directory rather than filling them with the specified commit), uses confusing examples (not clear that they are separate, or what exactly each is demonstrating); diagram of commit tree (left-to-right, directed, labelled but without HEAD, commit IDs are "Commit 1" etc); shows how to create tags (with messages), push them to a remote, and delete them (deleting tag from remote uses the "git push :<tagname>" syntax, when you could/should use "git push -d <tagname>"); shows creating ("git format-patch"), applying to the working directory ("git apply"), and committing ("git am") patches (NB: 'apply' can change the working directory, the staging area, or both; 'am' can commit multiple patches e.g. if given a mailbox rather than a single message).
+
+   Finally introduces creating a branch (in part 19/22); diagram shows branch as a label pointing to a commit, but doesn't make this explicit; shows creating, switching to, then shortcut (checkout -b); covers deleting a branch with -D, advises switching to another branch before deleting (cannot delete the checked-out branch); shows renaming a branch (though diagrams don't reflect name change); shows (fast-forward) merge; terrible description of what (non-fast-forward) merging and rebasing are actually doing; notes you cannot change the order of commits for a shared remote repository (suggests rebasing your commits onto the latest remote updates); sets up a plausible merge (implicit, via pull) conflict, and shows how to resolve; after resolving pull (merge) conflict, says to pull again and now it will succeed (unnecessary, though a *push* might be a good idea); says "core.autocrlf=input" changes line endings on checkout (actually on commit); briefly covers using online hosting for a remote repository.
+
+----------------------------
+
+Git For Ages 4 And Up (1 video 1:39:42, physical models, command-line)
+http://www.youtube.com/watch?v=1ffBJ4sVUb4
+
+   Building physical commit tree (bottom-up) with wooden toys (blocks, (undirected, though later says the direction is "down") dowels, and labels); aimed at people with some git/version control experience (expects you know/use basic commands but don't really understand them - especially as the commands don't do what they do in other version control systems); shows that focus on how commands affect the tree helps - normally needing to know the internals to understand a program is a red flag, but in this case it's worthwhile because the internals are so elegant - all based on a few simple graph-based actions; has single letters on blocks as IDs (reasonable simplification), but references/describes what the ID actually is (hash of author, date, contents, history, etc); rather meandering, as well as slow and fiddly because of physical trees (taking time to build, forgetting to move labels, running out of space/pieces, forgetting to switch camera, gets out of sync with digital version).
+
+   Treats staging as adding new node to the commit tree, but not giving it a label or updating the branch positions - may be closer to what's actually happening under the hood, but less helpful from a learning perspective (does later mention advanced staging, but is not generally explicit about the three areas); has HEAD as a label attached to a commit rather than to a branch label - misleading when it comes to discussing "detached HEAD", but clearly demonstrates what can happen with a detached commit; branching is scary in other version control, not in git (just putting a new label on a node) - has checked-out label a different colour rather than attaching head to it; notes "reset" as the "arbitrary label move command"; says rewriting history is a misnomer - sometimes create new commits, ignore old ones, but the old ones are still there until garbage collected; worry about clean history later, understand the basics before learning about/doing something dangerous like rebase.
+
+   Git has a lot of merge strategies, and is usually good at picking an appropriate one (mentions octopus merge as an excuse to show a photo of octopi); doesn't cover merge conflicts; suggests that remotes are usually where things get messy/complicated; points out "clone" can be done from any location (url, directory, etc); ignoring HEAD label (and which branch is checked out) on remote repository for simplicity (notes that it still exists, but can't be interacted with so it's largely irrelevant).
+
+   Covers branch and checkout before -b option, similarly describes pull as fetch + merge (but never actually demonstrates either fetch or pull - does show push, which may cause audience to assume fetch/pull behave the same but in the other direction), also similarly mentions "commit -a" as combining add all with commit; references like "origin/master" are referring to the remote tracking label in the local repository, whereas "origin master" refers to the master branch in the remote repository; error messages when commands fail tend to be useful (provided you understand what it should be doing in the first place); labels (branches/tags) are not pushed/fetched by default (can be a bit fiddly); there are other more complicated labels (e.g. ones that have other associated data, or ones that are cryptographically signed); "git reflog" lists recent commits (useful if have lost a reference); quick coverage of rebase and ^ at end, doesn't really explain, but makes the point of not messing with history that you have pushed to another (public) repository.
+
+----------------------------
+
+Git Happens (1 video 55:35, diagrams)
+http://www.youtube.com/watch?v=Dv8I_kfrFWw
+Old version of slides at https://prezi.com/tnrx86yhlzll/git-happens-2-kcdc/
+
+   Aimed at users of version control; focused on de-crazying the git workflow; points out that git can be used much the same as any other version control (easy to learn), until you want to do something outside of the usual workflow and then suddenly it's a mess of confusing jargon and poor documentation; looking more at the concepts and the why rather than the how-to - enabling users to know what is possible, and what keywords to search for when they're trying to do something; warns that commands can do several different things depending on parameters given; git values your project history (easy to look at past commits), your ability to collaborate (easy to merge, especially if you do it frequently), and your privacy (easy to work on your own machine before pushing completed work); covers the three areas (working directory, staging area, repository) and the commit tree (directed, bottom-up, labelled, HEAD points to branch label); notes sha-1 hashes as ids for everything which makes comparisons easy; gives a summary of the internal storage (lots of DAGs); covers complex staging (e.g. of part of a file); notes the distinction between "author" and "committer"; explains "detached HEAD" and garbage collection; talks over "common" operations (add, commit, push, fetch, clone, merge, rebase, cherry-pick, squash); suggests using higher-level interfaces/IDEs/etc, e.g. git-flow, gitx/gitk, Tower, IntelliJ; advises against pull, should fetch then decide what to do (you should explicitly decide whether to merge/rebase or not, which branch(es) get merged, etc); explains fast-forward merge, and why it's needed for a push; don't need to push as often as can commit locally, advocates frequent fetch and only push when feature complete; calls out other tutorials for ignoring merge conflicts; fix merge conflicts immediately (or use "merge --abort"), as your repository is in a wierd in-between state, staging area contains successfully merged parts, working directory has conflicts highlighted for manual repair; can change history, but only until it's pushed to a shared repository; advises deciding how to tell your story (i.e. rearrange commits on feature branch before adding to master), speaker is a fan of interactive rebase.
+
+----------------------------
+
+Corey Schafer Git Tutorials (6 videos, some diagrams, but mainly command-line)
+
+   One beginner tutorial with diagrams, later videos aimed at people who've used git/command line before; later videos focused on specific issues, last two focused on specific tool(s); good for pointing out subtle details that can trip you up; frequent use of 'git status' to distinguish working directory, staging area, and commits; doesn't show commit tree; task focused (what to do if you are in situation X); very straightforward and systematic, covers only the details needed; covers remote repositories in first tutorial, otherwise uses only local repository; gives some workflow recommendations (pull before push, push feature branch for testing then delete later) without addressing the potential dangers.
+
+
+Command-Line Fundamentals (30:32)
+http://www.youtube.com/watch?v=HVsySz-h9r4
+
+Difference between 'add -A', 'add -u', 'add .', and 'add *' (10:14)
+http://www.youtube.com/watch?v=tcd4txbTtAY
+
+Using the Stash Command (10:32)
+http://www.youtube.com/watch?v=KLEDKgMmbBI
+
+Fixing Common Mistakes and Undoing Bad Commits (21:31)
+http://www.youtube.com/watch?v=FdZecVxzJbk
+
+Diff and Merge Tools (9:37)
+http://www.youtube.com/watch?v=iCGrKFH2oeo
+
+Change DiffMerge Font-Size on Mac OSX (2:38)
+http://www.youtube.com/watch?v=kjBA2WISteM
+
+----------------------------
+
+Introduction to Git (3 videos, diagrams)
+
+   Good for beginners, keeps things fairly straightforward, explains common workflows; shows both the three areas, and the commit tree (bottom-up, labelled, HEAD points to branch label).
+
+
+Core Concepts (28:37)
+http://www.youtube.com/watch?v=uR6G2v_WsRA
+
+   Good straightforward, simple introduction; doesn't show direction of pointers in commit tree (i.e. each commit points to its parent(s)).
+
+
+Branching and Merging (28:47)
+http://www.youtube.com/watch?v=FyAAIHHClqI
+
+   Useful branch introduction; lack of directed edges means misleading about where/how fast-forward merge can be done; confusingly vague about concept of 'three-way merge' - comparing the diffs of the two branch tips with their common ancestor; incomplete treatment of 'git stash' - doesn't show removing/deleting stashes, doesn't mention that it's a stack.
+
+
+Remotes (31:15)
+http://www.youtube.com/watch?v=Gg4bLk8cGNo
+
+   Points out remotes can be anywhere (from another directory on local machine, to hosted repo); uses "fetch", later mention "pull" as combining fetch and merge, but recommends doing them separately to avoid unexpected results; valuable for showing how to deal with multiple remotes, including one you don't have write access to: fork a copy on GitHub, use a pull request when you want your update to propogate to the original (an occasion where it makes sense to remove/delete a commit - when you're re-syncing after they accept your pull request).
+
+----------------------------
+
+Git Masterclass (1 video 1:02:05, diagrams)
+http://www.youtube.com/watch?v=L7_iMewv5vQ
+
+   A good introduction to the basics, assuming people have some familiarity with version control; covers a lot; suggests ignoring most of the commands/options available (distinguishes the "porcelain" and "plumbing").
+
+   Distinguishes the three areas (working directory, staging area, repository); notes "git status" output is usually useful to tell you what needs to be done; git uses sha-1 hashes as commit ids, as opposed to other systems that number them (in git you cannot guarantee order of commits), allows for storage and branching optimisation; mentions the versatility of "git diff" to compare different bits; "git log -S <TEXT>" searches for commits that involved adding/changing that text; "git blame <FILE>" shows which commit (and author) gives each line of the file; describes the convention of commit messages (first line - present tense imperative - the subject, longer explanation after a blank line).
+
+   Good demonstration of staging partial changes (patch/interactive), though notes it's rare to need/want to; introduces creating branches with "git checkout -b <NAME> [COMMIT-ISH]"; covers the options for "commit-ish" arguments, i.e. full/partial sha, branch name, tag name, HEAD, relative references (^N/~N); distinguishes -d/-D (only delete if merged into another branch/force delete) when deleting branches; warns against moving tags; points out tags are (by default) not pushed/fetched to other repositories; distinguishes from subversion which stores commits as diffs from the previous commit (hence cannot move commits).
+
+   Briefly shows contents of the ".git" directory; "git gc" will tidy and pack up the repository contents (done automatically before a push); display of commit tree (demonstrating merge/rebase) lacks arrows on graph edges ("train track" display - left-to-right, shows branch labels but not HEAD, single letters as IDs); recommends not using merge in order to keep history linear, avoid complexity; shows fast-forward merge; shows "git merge --squash" which creates BUT DOESN'T COMMIT a combination of every commit on the merged branch (allows you to specify a commit message); mentions unreferenced branch "going away" eventually, without explanation; can force to do a standard merge with the "--no-ff" argument (new commit is equivalent to branch tip, but with two parents, so the side branch is preserved); talks about conflicts in terms of having new commits on both branches, whether they affect the same files or not; rebase and cherry-pick can still have merge conflicts; cherry-pick good for grabbing emergency bug-fixes from another branch (for example).
+
+   Some diagrams confusing (inconsistency in what boxes represent); points out that remote tracking is based on your local copy of the remote repository (so doesn't automatically update if the remote changes - need to fetch); introduces "fetch" first, then "pull" as "fetch + merge", confusion about default behaviour of pull (in terms of which branches will get updated - current, specified, all remote tracking? - apparently varies between git versions); shows how to interact with remotes via emailed patches (turn commit into an email, remote user can apply just like a local patch); covers a few common variations of how teams collaborate with git (individual repos, heirarchy of maintainers, having a shared central repo, forks and pull requests), and how they treat their history of "master" (no branching, merge/rebase, preserving side-branches).
+
+   Introduces "hooks" (a bit like triggers in sql) which are executable scripts that run under certain conditions, e.g. pre-commit does checks before a commit and might reject the commit, there are sample hooks in the .git directory.
+
+   Points out that "rewriting history" is where there be dragons; lists rewriting commands: "reset --hard", "commit --amend", "rebase" (doesn't mention cherry-pick); says should only do with local repo, can force remote to match with "push -f", but advises against (especially if others can access the remote).
+
+   Can use git locally over the top of a remote svn repository (using "git svn clone" to create, "git svn rebase" to pull, "git svn dcommit" to push); recommends taking extra care when interfacing with svn.
+
+   Great section title: "Fixing Mistakes - In which we discover that although git allows you to shoot yourself in the foot, it also provides bullet-proof socks"; links to semi-comical flowchart about how to resolve messes (see 'git-pretty.png'); mentions stash and bisect but doesn't go into detail; presents "git revert" as a more polite way of undoing changes than "git reset"; can use "git reflog" to find lost commits (assuming they haven't yet been garbage collected).s
+
+----------------------------
+
+Git Is Simpler Than You Think
+http://nfarina.com/post/9868516270/git-is-simpler
+
+   Explains git by looking into the internals; aimed at autodidact techies who use git, but don't really understand it; says git interface is a hodge-podge of lazily-named command-line utilities; explains everything being stored via SHA-1 hashes for ease of reference and comparison; notes branches are just starting points (or "tips") for searching the history; mentions detached HEAD as when it points directly to a commit rather than a branch name, but doesn't explain further; explains fetch as just copying new files into the .git folder representing the commit, tree, and blob(s); suggests once you understand how git works internally, you can google for a command that does what you would do with the internal files to achieve your goal - very dangerous advice (no consideration of potential side-effects/consequences).
+
+----------------------------
+
+The Thing About Git (essay, some command-line)
+http://tomayko.com/blog/2008/the-thing-about-git
+
+   Extolling the virtues of the index/staging area and "add --patch" for resolving the "Tangled Working Copy Problem" (having multiple unrelated changes in your working directory that you want to commit separately); calls out a lot of version control systems for the "you should have ... " response - describing the ideal workflow rather than fixing the problem that exists.
+
+----------------------------
+
+Thou Shalt Not Lie: git rebase, amend, squash, and other lies (essay)
+http://paul.stadig.name/2010/12/thou-shalt-not-lie-git-rebase-ammend.html
+
+   Rant aimed at git users; expressing that various history-rewriting commands are
+bad and should not be used; motivation is that various useful tools (e.g. blame, bisect, rerere, "branch --contains") don't work as intended/expected if history has been rewritten; interesting follow-up links (see below).
+
+
+
+Re: [git pull] drm-next
+http://lwn.net/Articles/328438/
+
+   Mailing list rant by Linus Torvalds about keeping history clean and not messing with anything that's not your private history (i.e. commits made by you, not yet pushed to a repository that someone else can see); basically translates to "do it my way because I said so".
+
+
+
+Understanding the Git Workflow
+http://sandofsky.com/blog/git-workflow.html
+
+   Describes common workflow short-cuts and how they lead to problems later; demonstration of the dangers of git's interface; sensible awareness of the scaling of different approaches (e.g. workflow for two people vs large team); more reasoned argument for an approach similar to Torvalds' (see above); gives some examples of workflow for small, large, and messy branches; points out the two conflicting demands of version control - backups (want a complete history), and configuration management (i.e. tracking features etc - want a clear indication/separation of different modules/components without extraneous "fixed typo" type commits).
+
+
+
+Merge or Rebase?
+http://blog.sourcetreeapp.com/2012/08/21/merge-or-rebase/
+
+   Comparing and contrasting the two methods of integrating a branch back into master; simplified view (doesn't talk about the rebase commits still existing until garbage collected); covers pros and cons of each, and concludes which to use depends on situation (the idea of separating branches based on distinct features, not based on number of developers); when rebasing, can pay attention to 'author date', not 'commit date' to get an idea of when originally committed; interesting discussion of 'rewriting history' in comments - objective should be to improve signal-noise ratio.
+
+
+
+git-rebase
+http://blog.izs.me/2012/12/git-rebase
+
+   Exploration of the idea of "git is an editor"; *why* are you tidying history? Like with code, the aim is readability to help others follow your train of thought and use/adapt your work more effectively.
+
+
+
+Deliberate Git
+http://www.rakeroutes.com/blog/deliberate-git/
+
+   Transcript of a talk about writing good commit messages; some details seem to be personal preference (e.g. write in present tense), but some good concepts; commit messages should be subject (what change) followed by body (why); suggests writing subjects as imperative (i.e. commands), encourages thinking of commits as individual actions you can apply to your project; good to include (briefly) motivations, evidence for, and potential consequences of a change; this is non-trivial, so suggests doing your work, committing often (easier to combine small commits than split large ones) with temporary messages (e.g. "WIP"), then rewriting/rebasing etc to tidy up and document your changes once you're done (like writing/editing process).
+
+----------------------------
+
+CodingBlocks podcast - Comparing Git Workflows
+http://www.codingblocks.net/podcast/comparing-git-workflows/
+
+   Notes that git is a toolkit, and doesn't care how you use it; people have _opinions_; workflow matters, git workflow should align with your business practices. Different workflows are best for different situations/projects/teams.
+
+Hosts prefer command-line for most things, except for dealing with conflicts (tools make it easier to find the discrepancies). Note that git only notices textual conflicts, not logical ones (e.g. won't flag that heading doesn't match paragraph).
+
+   Centralised workflow doesn't worry about branches, everyone pushes to the "official" repository; simple to use, easy to understand (especially if you're used to something like SVN), but doesn't scale well. Good to use for simple/small projects (don't add unnecessary steps to your workflow).
+
+   Slightly more advanced is to create specific branches for each feature; allows sharing that feature without affecting production code; good for continuous integration (don't merge into master until complete and working); conflicts (whether using merge or rebase) become more of an issue the longer a branch is separate; most advanced workflows build off this.
+
+Reminder to not do anything to "rewrite" shared history.
+
+   "Gitflow" has several classes of branch ("master" -> release versions, "develop" -> working on latest version, features branch off develop, hotfixes branch off master). Very complex, but good for a highly-structured development with set release schedules. There are a lot of tools that support this workflow, but it's still incredibly complicated, has lots of branches & merges, and doesn't adapt well to supporting multiple release versions.
+
+   "Fork & Merge" (aka "Integrator") workflow, common in open-source projects. Each person has a public and a private repository. Others submit updates to the owner who chooses to integrate them (or not) into their public repo.
+
+   Microsoft's recommended approach is similar to Gitflow, but has multiple release branches (and branches tend to be longer-lived), and does less merging. Features are branched off master, each release becomes its own branch (also off master). Hotfixes etc get cherry-picked (suggests to use the "-x" option which adds a "cherry-picked from..." to the commit message) to wherever they are needed (can be easy to miss something, but tools can help a lot). Notes that merge conflicts are easier to deal with if you were one of the authors, and this repeated cherry-picking is of a small change that you just made (so it's in the forefront of your mind). Great for supporting multiple-releases.
+
+----------------------------
+
+git - the simple guide
+http://rogerdudler.github.io/git-guide/
+
+   More a command reference than a tutorial; describes the three "trees" (working directory - actual files, index - staging area, HEAD - odd way to refer to the commit tree, as HEAD isn't necessarily the most recent commit), and that stuff moves by using add and commit; then covers pushing to a remote before how to add a remote; covers creating/deleting/switching/pushing branches; recommends pull to fetch and merge (terms highlighted without explanation) remote changes (doesn't specify where they get merged); covers the possibility of merge conflicts, says they must be manually resolved by editing the affected files, then adding them (doesn't mention whether then need to commit); gives various log options to help find particular commits; introduces tags (typically for release versions); presents checkout as a way to revert particular file to the last committed version; says can revert to the state of the remote repository with "git fetch origin" and "git reset --hard origin/master" (though I'm not sure what this will to if you're on a different branch); presents some other useful tips and resources.
+
+----------------------------
+
+Smart branching with SourceTree and Git-flow
+http://blog.sourcetreeapp.com/2012/08/01/smart-branching-with-sourcetree-and-git-flow/
+
+   Based on the idea of "gitflow" ("A successful Git branching model"). Advises taking a standardised approach, as it helps ensure everyone in your team is on the same page, things are less likely to get messed up. Describes gitflow (in terms of specific branch types and when they diverge/merge). Mainly advertising their product's support of this workflow.
+
+----------------------------
+
+4 branching workflows for Git
+http://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf
+
+   Awkwardly written in places - author's native language seems to be portuguese. Some of the pros and cons seem copy-pasted and not correctly updated (e.g. saying a particular workflow is both good and bad for maintaining a single version).
+
+   Git Flow, noted as the best-known workflow they cover, based on two core branches (master and develop), and various short-lived supporting branches (feature: branches off develop -> merges into develop, hotfix: master->master&develop, release: develop->master). Pros: gives structure, follows a systematic pattern, and is well supported by tools. Cons: history spaghetti, not good for continuous integration (because of the master/develop split). Says is good for multiple versions in production, but probably the opposite (bad if several concurrent versions to maintain).
+
+   GitHub Flow is simpler, based on a set of principles. Everything in 'master' is deployable (immediately), develop anything in a (shared) feature branch, merge back into master via pull request. Pros: simple, good for continuous integration. Cons: doesn't account for different versions (e.g. for different platforms), easier to get code to production so more likely to introduce bugs in released version.
+
+   GitLab Flow is based on a set of rules. Commit to feature branches (off master, merged back into master), never directly to master; run all tests on every commit, on every branch; review code _before_ merging to master; deploy/release automatically based on branches/tags; tags are _not_ set automatically; fix bugs in master first; never rebase; write intentional commit messages. Pros: good for continuous integration, history less complicated (than git-flow) especially if using "merge --squash" when integrating branches. Cons: more complex than GitHub-Flow, only for single production version.
+
+   One Flow is an alternative to git-flow (see above). Every release is based off the previous release, and there is no 'develop' branch. Not clearly explained. Pros: simpler history, more flexible. Cons: not good for continuous integration, not good if many concurrent versions.
+
+----------------------------
+
+Git Workflow Explained --- A Step-by-Step Guide
+http://medium.com/@swinkler/git-workflow-explained-a-step-by-step-guide-83c1c9247f03
+
+   Aiming to find and solve problems (bugs etc) before e.g. a feature is integrated into the main codebase. Notes that git terminology can be confusing, and it helps to have a clear visualisation of what's going on (hence diagrams etc).
+
+   Suggests following workflow: Set up 3 repositories (central GitHub repo that everyone "draws from", fork it to a personal GitHub repo, clone personal repo to local machine). Make the central repo a remote for the local repo. Make a local branch to develop each feature (i.e. keep them separate from the master branch). Make commits to the feature branch as that feature is developed. Pull from central repo to update, then merge master branch into feature branch (resolving conflicts locally), then push feature branch to personal GitHub repo. Finally, make a pull request to the central repo from your personal GitHub repo.
+
+----------------------------
+
+5 Git workflow best practices you've got to use [2019]
+http://raygun.com/blog/git-workflow/
+
+   Offers tips for workflow improvement. Advises using merge tool. Notes conflicts possible (probable) with merge and rebase. Refers to "Step 3" etc. but not numbered. Recommends rebase (rather than merge) for integrating feature branches (seemingly because deal with conflicts one commit at a time rather than all at once?). Notes the usefulness of advanced staging ("add -p") for making logically coherent commits. Advises deleting old branches (i.e. ones that have been merged into master), and making sure they are named meaningfully (similar to naming variables). Can rename branch if need be. Recommends hard reset for giving up and starting again if your feature is not going to work, but warns to use carefully.
+
+----------------------------
+
+5 types of Git workflow that will help you deliver better code
+http://buddy.works/blog/5-types-of-git-workflows
+
+   Recognises that there are different workflow requirements depending on project type, size of team, company structure, etc. Notes that the larger the team, the more important it is to have structure to prevent problems. Gives simple description of popular workflows, but notes they are just examples, and you should adapt to your own needs.
+
+Basic: no branches, everyone has a local repo and pulls from/pushes to a designated central repo. Most projects start here, as it's a minimal viable structure for team collaboration.
+
+   Feature branches: the above, plus parallel development tracks. Allows for different parts of a project to be developed independantly. Can make a release with feature A without having to wait for feature B to be completed.
+
+Feature branches + merge requests: the above, plus team hierarchy (junior members can submit possible updates, but only seniors can integrate them). A bit like the "integrator" workflow, but finer-grained. Plug their product ("Buddy") which provides branch-level permissions (so e.g. a user can read every branch but only write to the branch they're assigned to work on).
+
+   Gitflow: notes that on a large project, you need more control of releases, and more integration and unit tests. This workflow separates master into two branches for releases (everything fully tested and approved) and development (where features are merged and tests are done).
+
+   Forking workflow: the common open-source "integrator" workflow (one official repo, others fork it, make a change, send patch/pull request. Likens to feature branching but creating separate repos rather than separate branches.
+
+----------------------------
+
+A successful Git branching model
+http://nvie.com/posts/a-successful-git-branching-model/
+
+   Explicitly introduces gitflow as a branching strategy they personally implemented and found to be successful. Notes the debates online about which version control to use, cites git as a personal preference due to relative ease of branching/merging. Notes that designating one repository as the central one is only a convention, and that team members can push and pull directly between themselves (when working as sub-teams; saves sharing a feature branch with those not working on it).
+
+   Introduces the two long-term branches, 'master' and 'develop'. Master has only commits that represent production-ready code (i.e. releases), whereas develop is where changes are integrated to prepare the next release version. Doesn't initially specify how a release-ready commit on develop is integrated to master. Suggests could set up an automated roll-out to run every time a commit is made to master.
+
+   Other (support) branches have a short/limited lifetime, and are used to aid development. They can be classed as feature, release, or hotfix branches. Each type has a specific purpose and is used in a specific way. Notes that git doesn't care - a branch is a branch - the meaning is applied by the team.
+
+   FEATURE - branches off from develop, and 'merge --no-ff' back into develop. It exists for as long as that feature takes to develop; once merged, the branch is deleted. They usually only exist on local repos (for an individual, or a sub-team, working on that feature), not in the central repository. '--no-ff' ensures a specific merge commit on develop so that the commits on the feature branch remain distinct. A fast-forward merge would make it harder to determine where the feature branched from, and where it was merged. Having a designated commit for integrating the feature also makes it easy to revert the feature (undoing one commit).
+
+   RELEASE - branches off from develop, and merges into both develop and master (and is then deleted). They allow for isolating of a release candidate, and last-minute checks, minor bugfixes, meta-data preparation etc. This allows work to continue on the develop branch. Releases are assigned a version number (decided by whatever numbering scheme is being used) at the time their release branch is created (at that point, it is clear what features are included in the release). While a release branch is active (i.e. unmerged) hotfixes are integrated into it, rather than into the develop branch. When the release is completely ready, it is merged into master (again using '--no-ff' to ensure a specific commit exists, which is tagged with the version number). The release branch is then also merged into develop (to ensure the bugfixes get applied everywhere). Notes that there will probably be merge conflicts here, as develop is likely to have new commits since the release branch was created.
+
+   HOTFIX - branches off from master, and merges into both develop/release and master (and is then deleted). Like an unplanned release branch, due to having to immediately patch a problem that has arisen with the latest release. Once the problem is fixed, as with a release branch, a version number is assigned and a merge commit is created and tagged on the master branch. The hotfix branch is also merged (with '--no-ff') into the current active release branch (and develop if there is no current release branch or the fix is urgently needed there too).
+
+
+
+GitFlow considered harmful
+http://www.endoflineblog.com/gitflow-considered-harmful
+
+   Motivated out of initial, personal dislike of GitFlow as described (see above). Feels it is over-complicated, and solving a non-existant problem [NB: clear case of not understanding the solution if you don't understand the problem - seems to work in a different sort of development that GitFlow is not designed for, therefore doesn't see the point of it]. Lists what is "wrong" with GitFlow, and presents an alternative.
+
+   Claims GitFlow causes spaghetti history, and shows screenshot to justify it (which doesn't look too bad, personally). Shows commit history bottom-up, (un)directed (sometimes arrows, but mostly not), labelled (without HEAD) - gitg screenshots. Suggests nearly impossible to find things in that history (surely there are tools to help with that?), and notes it's not the worst they've worked on, adds "this is from a small team (~7 developers) - imagine how much worse would it look for a larger one" (reinforces that author's situation is not suited to GitFlow).
+
+   Claims easier to track down a bug if the history is fairly linear, but gives a bad example: shows a more linear history of same project as the above "spaghetti" history, says the bug is to do with particular feature, asks which is easier to work with; there are 6 commits directly referencing that feature, but with log etc you can easily see the history of the branch, including commits that don't reference the feature ID in their commit message.
+
+   Main gripe seems to be a dislike of branches, preferring to use tags/commit messages to designate particular releases/features/etc. As such, finds GitFlow over-complicated and with too many branches. Complains about frequent developer errors (e.g. pushing to/diverging from/merging with wrong branch) and blames the workflow rather than the way it's taught/used. Again, seems clear GitFlow doesn't suit the development environment they are in.
+
+   Presents an alternative workflow (dubbed "anti-gitflow", though later renamed "oneflow" (see below)). Maintains one permanent branch, keeps as linear as possible. Features etc are branched off, and (preferably) rebased onto master once completed. Releases are branched off master, tagged when finalised, then merged back into master. Hotfixes are branched off a tagged release, tagged when finalised, then merged into master. All merged/rebased branches are deleted. Advises "semantic versioning" (i.e. <major>.<minor>.<hotfix>); increment hotfix for bug- and security patches to the latest release, increment minor if the release is still backwards-compatible, increment major if making significant changes (e.g. new API).
+
+   Asserts that his alternative is "exactly as powerful as GitFlow with regards as to how expressive the branching model is", which is hard to quantify (c.f. many languages are turing-complete, but some are better-suited to a task than others).
+
+   Notes that neither oneflow (or gitflow for that matter) work well for supporting multiple release versions (e.g. customised for different clients).
+
+   Suggests an addition for people that don't want to have to search for the latest tag, but just 'checkout master'; rename the master branch 'develop' and make a new master branch that always points to the most-recent tag (so whenever you add a release tag, also merge into master). Which seems a lot like gitflow to me; main difference seems to be preference for '--no-ff' (gitflow) compared to fast-forwards and rebases (oneflow). Essentially the merge/rebase religious war. Contradicts the earlier assertion that having two permanent branches adds no value.
+
+
+
+A succesful Git branching model considered harmful
+http://barro.github.io/2016/02/a-succesful-git-branching-model-considered-harmful/
+
+   Author apparently Finnish, so some odd phrasing (non-standard grammar).
+
+   Argues that gitflow is over-complicated, and changes the default git behaviour (of "master" being where development happens). Advises continuous integration for everything (regardless of whether it's suitable for that project or not), and asserts long-lived feature branches just delays fixing of integration issues (both merge conflicts, and code problems) so they therefore get worse.
+
+   Claims history should be linear, because merge commits don't have meaningful messages, and it is harder to use tools like 'bisect' if the history diverges. Based on the likelihood of non-conflicting code (i.e. can be merged automatically) having _logical_ conflicts (i.e. parts no longer working together). This also avoids "integration hell" of multiple branches needing to be merged. Releases are branched off master, and tagged with version numbers. Hotfixes are added directly to the relevant release branch, and cherry-picked to master.
+
+   Prefers trunk-based development (though they call it "the cactus model"), and recommends "Gerrit" (git server that integrates code-reviewing and access-control (e.g. can give read permission but not write permission on a branch), as well as many other plugins). Points out this is for the central repo; individuals can work however they like in their local repos as long as master is the only shared branch (so rebase frequently to keep up-to-date with remote master). Shows commit history (either top-down or left-to-right, undirected (some arrows, but they seem to indicate cherry-picking), branches labelled spatially, no HEAD). Uses colour of commits to indicate status (e.g. under review, active development, integrated, unreferenced).
+
+   As all integration is via rebase and cherry-pick, you avoid merges (and the "christmas tree" look for your commit history). Doesn't mention that there can still be conflicts with these operations.
+
+----------------------------
+
+OneFlow - a Git branching model and workflow
+http://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow
+
+   In-depth explanation of the OneFlow branching model. Starts by reiterating the claim that it is as powerful as, and simpler than, GitFlow, with a more-readable/-searchable history. Notes that it is applicable to the same scenarios that GitFlow is, viz projects with a single "current" release, and every release based on the previous one; it is not suited to a project with multiple concurrent versions. Also doesn't advise it for highly automated scenarios (e.g. continuous delivery/deployment), as it's too "heavy" (does not define what is meant by this). Covers the various types of "support" branches that attach to the main branch ("master", unless using the two-branch variation below).
+
+   Shows commit history (uses the GitGraph.js library, so blame them): directed (wrongly - parents point to children), labelled (uses colours and spatial position to distinguish branches, so branch heads ambiguous, without HEAD, displays tags in box next to relevant commit), top-down. Rebase diagram greys-out old versions of commits, only shows two of the three new commits (implicit squash?). Merge "no-ff" diagram is not one where the flag is needed (new commits on master so couldn't fast-forward anyway) - done to have same starting point as rebase?
+
+   FEATURE - branch off master, get deleted once integrated, generally not shared (indicative of the assumed team-size and interaction). Can be integrated via 'rebase -i' (author preference - "cleaner" history, but harder to revert feature), 'merge --no-ff' (gitflow's preference - "messier" history, easy to revert feature), or a combination of the two (rebase then merge --no-ff) which gives the best of both worlds but is noted as being harder to enforce (via software) even though the commands used are almost identical to the rebase ones. Uses 'push :dest' syntax to delete remote branch (if the feature branch has been shared).
+
+   RELEASE - branch off master, do appropriate final labelling and testing, tag once ready, then merge into master, push (including the tag), and delete the branch (including the remote one if it has been shared).
+
+   HOTFIX - branch from relevant release (i.e. tagged commit), otherwise treated the same as release branches, with the exception that they be merged into the next release branch (if one exists) rather than master.
+
+   Notes that an additional permanent branch can be added that always gets fast-forwarded to the latest release (i.e. the tagged commit, done when tagging the release and merging back into the trunk). If using this, it's wise to call this "latest release" branch 'master' (so anyone checking out master gets the latest stable release version) and call the other permanent branch something like 'develop'. This means hotfix branches are always created from 'master'.
+
+   Remarks that GitFlow has command-line tools, which makes it harder if something goes wrong (i.e. only understand the tool, not the underlying workflow, so can make mistakes which mess up the state of the repository), but help with enforcing team-wide standards. Seems more a fault of the implementation of the tools than of the concept of tools, personally.
+
+----------------------------
+
+CakeDC Git Workflow
+https://www.cakedc.com/git-workflow
+
+Loosely based on GitFlow. Description rather buzzwordy. Has four key phases:
+ - Development; driven by milestones, has the latest (unstable) code base
+ - QA; part of development, check requirements compliance and acceptance criteria
+ - Review; clients/reviewers see latest stable code base after it has passed QA
+ - Release; generated after passing both QA and review
+
+   Aimed at situations with formal QA and review steps in their development cycle, but they can be skipped if need be. A release is based around a set of milestones (objectives/deliverables).
+
+   Shows (sparse - only some commits shown) commit history top-down, spatially-labelled (without HEAD), wrongly-directed (seems like an odd mix of a commit history tree and a handshaking protocol diagram). Has some command-line examples.
+
+   Has four permament branches (which cannot be committed to directly, can only integrate (via "merge --no-ff") other branches into them):
+ - develop; aka "bleeding edge", contains completed features, alpha code base, considered unstable, merged into qa once a milestone is complete (development can continue while that milestone is being tested)
+ - qa; potential release set aside for testing, beta code base, considered unstable, once has passed the tests is merged into 'stage' (and tagged as a milestone) as well as 'develop' (to integrate any issue fixes for future development)
+ - stage; hosts stable code for review, problems arising here are treated as new features to be added in future development, once all the milestones in the current set have been reviewed stage is merged into master and tagged as a release
+ - master; approved stable code, current release version, production environment
+
+   Has three types of temporary branch (rebased to keep updated, deleted after being reintegrated), much like in other workflows:
+ - features; created off/merged into the 'develop' branch, for a particular task
+ - issues; created off/merged into the 'qa' branch, to resolve a particular problem found in testing
+ - hotfixes; ideally shouldn't be needed, created off the 'master' branch, to fix serious/urgent problems detected in production (i.e. things that cannot wait for the next release), get merged into develop, qa, and stage as well as master
+
+Hotfixes can be tested in one of three ways.
+ - kamakazee: merged into master and tested in production
+ - copycat: merged into master and tested in isolation
+ - paranoid: not merged and tested in isolation
+
+----------------------------
+
+Git Workflows That Work
+https://www.endpoint.com/blog/2014/05/02/git-workflows-that-work
+
+   Describes gitflow as being significant as the first structured workflow for git that many developers had encountered, so it became "in a way, a movement". Suggests that it succeeded because people had been doing their own thing in an unstructured manner, and weren't sure about it; now there was a formal way that was sure. Doesn't present gitflow as the one true workflow, or even believe there _is_ one true workflow. Because the purpose of software is TO HELP PEOPLE. A helpful workflow is one that aligns with your software development process and business expectations. Presents a few examples (overviews - describes what happens, but not in detail as to when or why) as inspiration for finding your own appropriate workflow.
+
+   Shows commit histories wrongly-directed (parents point to children), unlabelled (though general indications are given via spatial labels, e.g. feature branches on the right), bottom-up. There is no indication of HEAD, or even the current commit. Merge commits are given a different colour from other commits. Diagrams do not convey the workflow, so are more to give an overall impression of complexity.
+
+   GitHub Flow - the internal workflow used by the GitHub company, who deploy multiple times a day (so need something quick and easy; they've even automated their releases). Based on a set of rules:
+ - Anything on master is deployable.
+ - Develop by descriptively-named feature/hotfix branches off master.
+ - All work (whether local or shared) is done on feature branches.
+ - Issue a pull request when a feature is ready.
+ - Features are reviewed and signed-off on before being merged into master.
+ - Updated master should be deployed immediately.
+
+   Skullcandy's workflow - loosely based on github flow, using scrum (well-defined sprints with a deliverable/release at the end). Based on the following rules:
+ - An issue (userstory or defect) was represented by a single appropriately-named branch (and led to a single deliverable).
+ - Everything (features and hotfixes) branches off master.
+ - After code review, feature is merged into a (temporary) QA branch and deployed to them.
+ - Releases happen weekly, and consist of only the changes approved by QA.
+ - Branch names are tied to issues in the issue-tracking system, for ease of status checks and automation.
+
+   Master-only workflow - noting that other workflows may well be too complicated for small teams/projects, so it may be appropriate to not bother with any other branches. Features/hotfixes are worked on in a production-equivalent development environment where changes can also be tested and approved. Once approved, they are committed to the master branch of the central repository, ready for immediate deployment.
+
+   Gitflow - the opposite (in terms of complexity) to the above. Has several important (long-lived) branches (master, release, and develop), as well as short-term ones (for features/hotfixes). All work is done in a branch (a meaningless statement). Features branch off develop, hotfixes branch off master. Features are merged into develop (after approval). Develop is merged into a release branch. Hotfixes are merged into master, then also into develop (and the release branch). Release is merged into master. Master is deployed to production. Doesn't really explain the process very well.
+
+   Backcountry's workflow - described as 'similar' (but to what? presumably gitflow as it's the previous one) but with different branch names. Development happens on master, feature branches off master and back into master. Release branches off master. Releases merge into a branch called "production".
+
+   Finishes with some general guidelines for choosing/adapting your workflow. Branches should represent a single deliverable request/issue (i.e. what is needed to fix that problem or add that feature AND NO MORE). The longer a feature branch exists, the more difficult it will be to integrate (due to merge conflicts etc), so try to keep them short-lived. Involve everyone in the business to prevent "pain and tears" (presumably owing to some people not understanding, or resenting, the steps they have to go through). Test thoroughly before merging, and use "--no-ff" to ensure it is easy to revert the merge if need be. Match your workflow to your release schedule (and how the rest of the company operates). Don't overcomplicate.
+
+----------------------------
+
+Git Workflows for Pros: A Good Git Guide
+http://www.toptal.com/git/git-workflows-for-pros-a-good-git-guide
+
+   Covering general principles of different workflows to help you adapt (either to joining a team, or deciding on a workflow). Great coining: "git-tastrophes". Notes that planning collaboration is about how to integrate different people's work to minimise issues and support your business strategies.
+
+Shows commit history (much like CakeDC above) as sparse, top-down, spatially-labelled (without HEAD or current commit), wrongly-directed (but only has arrows for things like merging). Implies branch divergence done via the 'checkout' command (which can create a branch, but it doesn't diverge until a new commit is made).
+
+
+COLLABORATION
+
+   Integration branch - having a separate (non-release) main branch to handle integrating features, testing, etc before releasing into production. Must integrate with the release/production branch after testing and before integrating any new features (i.e. only release fully-tested features), so timing/permissions (for integrating features) may be an issue.
+
+   Topic branch - aka feature branch, helps clarity of history and allows easy revert of features. Suggests that, even if shared, may be tidied (e.g. squashed), which could get messy (advises other users should be aware it may be changed, but how do they know when it happens? Their fetch etc approach should be different if they're force-updating a changed history than if they're integrating new commits). Does advise against this for _publicly_ shared repositories.
+
+   Fork - (diagram confusing - rebasing from origin master to a feature branch then merging back? not sure what part of workflow it represents) allows open collaboration along with control of your central repository. Doesn't really explain how it works, beyond that all integration is via pull requests. Advises against the core team members having forks of the central repository, they should have direct access. Implies small teams (gets unwieldy with too many) with many outside collaborators.
+
+   Clone - described as useful for outsourcing, allowing other group to work independantly then push back to the original when complete. Notes that outsourced group should not host a copy of the client's repository (as that may violate the contract).
+
+
+RELEASE MANAGEMENT
+
+   Different approaches you can take, advises choosing the simplest one that will work for your team.
+
+   Environment branches - having a separate branch for each different environment the project will go through (e.g. development -> qa -> staging -> production). This isolates a possible release version in that environment, allowing testing etc. Warns that can create bottlenecks, so recommends considering other (less rigid) patterns first.
+
+   Release branches - naturally suited to sprint-type environments. Package and separate a potential release (from a development/integration branch) on a separate branch where it can be tested and finalised before deploying to production (often another branch). Short lifespan (deleted once deployed). Unlike the above, could allow several releases to be in the process at the same time (though doesn't recommend: notes that this makes keeping them up-to-date - e.g. if one release gets a bugfix it should probably be applied to the other(s) as well - can become troublesome). Suggests assigning a version number when creating a release branch (as you don't necessarily know beforehand what features will be ready). Recommends using hooks to automatically deploy when merged to the production branch (often master). Suggests this pattern doesn't work well when you have multiple largely-separate teams, as one team preparing a release could be blocking another who want to release.
+
+   Timestamped releases - automatically timestamp-tagging (and deploying) the latest commit on master at a set time (rather than manually). Often used when deployments need to be done at low-traffic times (e.g. updating a website). Means more likely to need to compare commits etc to find out who was involved if needing a bugfix (as opposed to it being the person doing the deployment). Means the rest of the workflow must ensure that anything on master is deployable (i.e. fully integrated and tested). Suggests using an integration branch, or merging master->topic before topic->master to deal with any merge conflicts etc. Notes the value of the meta-data (timestamp etc) on releases for quickly responding to any issues raised with the release.
+
+   Version branch - maintain several concurrent versions of your product (in separate main branches). Recommends semantic versioning, and using "<major>.<minor>-stable" (e.g. "1.2-stable") as the names of the version branches. Bugfixes etc are applied to all the current versions. Advises against this if you will only support one (most recent) version.
+
+   Reminds to re-assess your workflow when your team or project changes.
+
+----------------------------
+
+A stable mainline branching model for Git
+https://www.bitsnbites.eu/a-stable-mainline-branching-model-for-git/
+
+   Describing their personal preference for a git workflow that could be used for continuous integration. Similar to OneFlow (see above), prefers rebase (and thus a linear commit history) over merge. Written as an overview, to not get caught in the weeds of different tools etc.
+
+   Shows commit history wrongly-directed (some arrows indicate cherry-picking), bottom-up, spatially-labelled (without HEAD). Branch types (master/feature/release) are shown in different colours.
+
+   Notes that the major problem with continuous integration is that everything stops to fix a broken build, which can be a bottleneck when the team is large (as not everyone is needed to fix the problem, so everyone else is left waiting). Instead, this workflow is designed to deal with problems before they get to the mainline (i.e. 'master').
+
+   Master is the main trunk. Commits on it are assumed to be stable (i.e. passes tests, compiles on all relevant platforms, etc.), but do not necessarily pass all QA tests. Every commit is a potential release.
+
+   Features are developed on short-term feature branches, which is where both development and testing occur (clear isolation of that feature). Branches off master, merges back into master once complete. Each is associated with a particular feature/issue (e.g. tie-in with issue tracker). Tests (and associated fixes) are done before merging back to master. Use regular (the longer the branches diverge, the more difficult it becomes to integrate - more conflicts etc) rebases to update with other changes to master (so that all testing is done on exactly what you'd get when merging to master). This does create the potential for race conditions (i.e. if two features are complete, one must be fully tested and merged, then the other must be rebased on top of that before it can be tested), but hopefully can be largely automated (rebase, run tests, if pass merge --no-ff, if fail notify developers). When finished, may be tidied (interactive rebase), then merged (must use --no-ff to maintain branch structure) with master. Notes that will need to be force-pushed after rebase and/or cleanup (without noting the dangers of this).
+
+   Standard releases branch off from master, and never get merged back. Patch releases (basically hotfixes) branch off an existing release (but otherwise function the same). It provides an isolated "freeze" of the code (allowing development to continue on master), and gives a fallback point (if an issue is raised with that version). Suggests semantic versioning to name them. Also tagged (not just version, but also noting things like beta releases, or that was built for a specific customer). Initially commits are tagged as a release candidate, and updates/fixes are made as the QA/testing process is done. An actual release version is tagged once it passes all tests etc. Bugs can be fixed either through the usual development process (new branch for the issue), then once merged into master, cherry-pick the fix into the release branch. Alternatively, a quick-fix can be done on the release branch if the underlying problem would take too long (start an issue for solving it properly, and patch a work-around), or master is no longer compatible with that release.
+
+   Recommends breaking down features as small as possible (to separate branches) to help ensure the branches are simple and short-lived. Notes that sometimes long-term feature branches are unavoidable, and again advised frequent integration (i.e. rebasing) to keep in sync, and to make extra effort in coordinating the team. Suggests implementing abstraction layers (so other modules can interact with either the old or new system without having to care which) when doing major reworkings ("branch-by-abstraction").
+
+   Notes that it occasionally may be necessary to base one feature branch on another. Again, suggests regularly rebasing to keep in sync, and waiting till the first feature is integrated into master before finalising the second. Notes that this can make the second feature very challanging to work with (as the updates to the first feature branch can have flow-on effects to the second).
+
+   Feature branches don't have to be shared, but if they are recommends regular sync (through 'push' and 'pull --rebase') and clear communication between collaborating team members (so everyone knows what changes are happening and why). To avoid issues with sharing re-written history, the rebased branch should be given a new name (e.g. update a version number at the end).
+
+   Supports the conventions for commit messages (short imperative followed by longer explanation), as well as adding the ticket ID (i.e. note what issue is being worked on - especially important if it gets cherry-picked out of its original context).
+
+   Notes that tests on feature branches should be as thorough as possible (to ensure master only contains stable commits), but also as fast as possible (to save people waiting around for tests to finish). Basically, do as much testing as is practical as soon as possible (e.g. test locally before submitting a feature for code review/pull request). Make it easy for developers to run the tests, or they won't bother.
+
+Anything that is version-specific (e.g. release notes) should be updated automatically (i.e. have a script to assign version numbers etc); another reason for having a separate release branch (master should be release-agnostic).
+
+   Shows some ways (and pros/cons) of adapting the model to different situations/requirements. For example, using fast-forward merges (feature->master) makes the history more linear (as tools don't/can't enforce rebasing before merging), but you have to ensure every commit on the feature branch is stable as it will end up being part of master, and you lose the clear separation of the feature. Releasing may be simpler - there may be no need for separate release branches, and thus commits on master can be tagged directly. Releasing may be more complicated (e.g. separated into development/staging/production) which means parallel mainlines.
+
+----------------------------
+
+An Automated Git Branching Flow
+http://www.josra.org/blog/An-automated-git-branching-strategy.html
+
+   Notes that due to older version control systems not being good at branching/merging, most teams are not used to it, hence the need to develop good workflows. Describes a workflow that can be automated easily, and is based around "Jenkins CI" (continuous integration) and its git plugin. Similar to gitflow, but opines that it is too complex.
+
+   Displays commit history wrongly-directed, top-down, spatially-labelled (without HEAD), with coloured boxes for tags and speech bubbles for meta-notes (borrowing style from GitFlow's diagrams). Sometimes just show one/a few branches to focus on particular parts of the workflow.
+
+   Uses branches to indicate "state" rather than repositories (as some other workflows do), as branches can be easily copied, and it does not require any meta-knowledge (e.g. that this particular repo is for QA testing). Could use tags, but wanting to simplify (adding tags would be an extra step, will be branching anyway).
+
+   Have a general principle that merging into a branch means advancing along the "release train" (e.g. moving from development to QA testing), so need to have a formal verification that this merge is appropriate (only a few have permission to make the merge, others can submit merge requests), but instead have automated via Jenkins CI (automatically runs preset tests before accepting/rejecting merge). General workflow based on 10 principles (which they call "commitments"), but they are inconsistent about the order of them.
+
+   1. Integration branch is where developers do continuous integration. Where parallel work becomes sequential. The longer the divergence, the harder the integration, hence doing it continually. Recommends modularity to aid integration (good practice in general).
+
+   2. Integration branch is called 'master'. Dogmatically claims master should be the only ever-lasting branch, and by git convention this is master. Changing the name can cause inconsistency across repos, so why bother?
+
+   3. Only trivial merges are allowed on the integration branch. Ones that require no human intervention - similar to push requiring fast-forward merges only. If there are conflicts, master must first be integrated into the development branch, and conflicts resolved there. Merge/rebase agnostic, just requires that developers keep updated with master.
+
+   4. The integration branch is always aiming at the next release. There should be no need for "release" branches to do last-minute tidy-ups. Notes this isn't relevant for their style of development. It's likely most of the team are working on this release, and can hold-off integrating anything new until it is completed.
+
+   5. All integrations on the integration branch must pass an automated toll-gate. If the process is triggered (in their case by pushing a development branch that's name begins with "ready"), the system does some basic tests and either makes the merge commit, or leaves the development branch separate.
+
+   6. Any push to the central repo that matches the naming convention (see above) triggers an automated integration. Branches can be happily shared (for backup or collaboration) if they don't match the format. This is a situation where the source:destination parameters for push come in handy.
+
+   7. All integrations onto promotion branches are automated. The system handles integrating if and when relevant tests are passed. Specifics of what promotion branches are is not important (given example has "stable" and "release").
+
+   8. Any promotion branch has only one contributor. Despite these branches being ever-lasting (contradicting the argument above), they are only accessed by the system which ensures only fast-forward merges, and that (for their example) master->stable and stable->release are the only possible integrations. (They are often drawn separately on diagrams for ease of comprehension, but are just additional pointers on the master branch.)
+
+   9. Every successful integration starts the pipeline. Code goes through several automated test phases, and is rejected as soon as it fails one. If it passes one phase, it goes on to the next (which may be associated with integrating with anothe branch, see above). If it passes all, it is a release candidate. Exactly what the steps are is up to the team/company involved. Advises efficiency of testing via modularity ("software as inventory") - thoroughly test each module, then at later levels can just test for presence/absence of modules.
+
+   10. Some development branches may be tied to maintenance branches rather than the integration branch. Handles maintenance of older releases via development on a maintenance branch (with similar automated promotions coming off it). Reminds that the maintenance branch needs to be integrated into master, too. Doesn't really explain well (just introduces the topic).
+
+----------------------------
+
+Practical Git: A Workflow to Preserve Your Sanity
+http://www.kdgregory.com/index.php?page=scm.git
+
+   Sidenote that git is much more efficient and nicer to use, but appreciates the versatility/power of ClearCase (broken link to config_spec, seems unwieldy and badly explained).
+
+   Doesn't see huge value in distributed version control, feels it add unnecessary complexity. Thinks since people can't be bothered doing an update and test before they commit, they're even less likely to go through git's stage-commit-merge-push steps - subversion is simpler, and apparently is getting better at handling branches. However, does mostly use git, partly because sometimes working offline, but also because everyone else uses git.
+
+   Laying out "best practices" for a basic git "broken branches" workflow, based on keeping code on private branches then merging/sharing once it is complete (i.e. no longer broken). Seems to be designed particularly for a scrum-style agile development process (regular sprints).
+
+   Recommends having at least one remote repository (even as a solo developer) purely as a backup, in case of accidental deletion of your repository directory (which would delete the '.git' subdirectory as well). Better if the remote backup cannot push (e.g. could be a bare repository).
+
+   With only a couple of people in the team, can just push and pull between their individual repositories, but with more will need a central repo (not required by git, but good practice). Advises assigning an integrator who is the only one who can push to the central repo (everyone else can pull from it), updates all go through the integrator (the linux kernal workflow that git was originally developed to support). Helps ensure that all merges/integrations happen cleanly. Doesn't have to be the same person all the time, can be assigned on a per-sprint basis (for example). Good choice is the person who understands the codebase the best (will be able to solve most integration problems quickly). Alternatively, could choose the least experienced (means they will have to learn about everything). Using GitHub (or similar) makes it a "team sport", combining it with code reviews and discussions.
+
+   Seems to equate git making merging easy with having no merge conflicts (which is naive). Recognises that, especially when collaborating, there _will_ be merge conflicts, and you should plan for them.
+
+   Advocates each project having its own repository (for clarity), as potentially have multiple team-members working on multiple projects, so need to separate somehow. The drawback to this is if the projects are related (e.g. one project is a library used by other projects). Mentions git's submodules, but considers them "more trouble than they're worth". Suggests use of build tools to sensibly grab the necessary components from different repositories.
+
+   The "broken branch" approach means 'master' is for integration, not development (as opposed to the "broken trunk" style of subversion or cvs; want to ensure things work - compile, pass tests, etc - before putting them on master). Feature branches are integrated into master once they are completed. This is especially important if you're integrating via pull requests or patches - you want to ensure the _only_ changes are those from the feature you are submitting. Any commit on master should be "potentially shippable" (in scrum terminology). Provides a stable base for developing other features on top of.
+
+   Each sprint gets a dedicated integration branch; each story in the sprint gets a development branch. Stories may have interdependencies, so may need to integrate between them during development. At the end of the sprint, an appropriate subset of completed stories are integrated and then merged into master. Incomplete stories (or those reliant on other incomplete stories) persist for the next sprint. Recognises that this can lead to a messy commit graph, but considers it worthwhile for ensuring master is always stable/shippable. Having a dedicated integration branch also helps with employing continuous integration (CI tools need to know where they can always get the latest stable version).
+
+   Advocates cleaning up after yourself. Firstly through squash-merging completed features to master (don't necessarily care about all the individual commits, especially as some may be of the "committing because going to lunch" variety); why author prefers git over mercurial (though mercurial can do the same sort of thing). Secondly through deleting branches once they have been integrated. Advises using '-D' as the merge-squash may not register as the branch being merged (though recognises this is riskier), and deleting remote branches with ':dest' syntax (notes that you have to make sure it's deleted from all the repos it got pushed/pulled to, but not that there's a nicer syntax). Also notes that the merge-squash will belong to the integrator (as they are the one doing the commit), which may mean 'blame' doesn't refer to the correct person (though git does distinguish author and committer, and the bug may be due to being incorrectly integrated).
+
+   Values the stash mechanism to handle interruptions (e.g. current work unfinished, but urgent problem needs to be patched). Advises against the alternative option of committing incomplete code (as "you never know where it will end up", but this seems overly cautious in comparison to some of their other advice). Recognises it as a stack, expects most activity will be with 'stash' and 'stash pop', mentions can access other elements with 'stash apply' though quips if that happens a lot you might be better unstashing your resume.
+
+   Suggests using patches if you end up with commits in the wrong place (distinguishes between 'am' which will commit every patch, from 'apply' which will stage but not commit a single patch - allowing another look/test). Personally, seems simpler to use rebase or cherry-pick (not clear why this isn't recommended, given that the author is aware of rebase - see below - misunderstanding of how commit history works?).
+
+   Uses reset to remove a mistaken commit (e.g. from master), notes that it still exists in the repo but is not easily accessible and won't be pushed. At a higher level, deletes and recreates a branch (to get rid of all the commits on that branch), and sets that (new) branch to track the branch on the remote. If the bad commits have been pushed, uses 'source:destination' syntax to push the new version (after deleting the old version via ':dest' as above). Notes again that this doesn't remove the commits, just makes them (relatively) inaccessible.
+
+   Shows that the advised (integrator) workflow adapts easily to using a host like GitHub (specifically that other users make forks of the central repo and submit via pull requests). Likes the pull request feature of GitHub (good for discussion and code review), but dislikes that a) it's too easy to just accept (doesn't force you to do any testing), and b) it doesn't have an automatic 'squash' option.
+
+   Lists a few bash functions/aliases that they use (e.g. a branch function that automatically ensures new branches are created off the current master). Prefers to use fetch & merge rather than pull, but only when getting an arbitrary branch from an arbitrary repository (does normal updates just with pull). Has a function to delete a named branch, both locally and on 'origin' (recognises it is dangerous). Seem like things good for personal use (has the experience to know what they do, how they usually work, etc), and a bit dangerous to be taken as general advice (at least without some more checking of arguments etc).
+
+   Notes the value of hooks for automation, and that different repositories can do different things (e.g. QA repo automatically runs unit tests, production repo automatically deploys, etc). Likes the git community book (ProGit) more than the official docs, particularly their rebase explanation. Likes gitflow, especially the pretty pictures.
+
+----------------------------
+
+GitHub Flow (#7)
+http://scottchacon.com/2011/08/31/github-flow.html
+
+   Does a lot of git teaching, often asked about gitflow. Thinks it's great, as it provides a flexible, well-tested workflow that can become a standard. Does acknowledge issues with it, however. Feels it's too complicated for most developers/teams, so much so that it requires helper scripts to enforce it. This is only bad because the helper scripts only apply when using the command-line, they're not (as of when this was written) integrated into GUIs the same way basic git is (so people either have to learn the command line or the workflow really well). GitHub uses a simpler process, so people can learn it easily, and it doesn't require any additional tools.
+
+   Main difference is use of continuous release; where gitflow is based around formal releases, github deploys to production several times a day. They make the final test and deploy as easy as possible so everyone in the team knows how to do it. Repeated small releases supposedly limits the numbers of "big bugs" that can be introduced, and small bugs can be rapidly fixed using the normal process rather than a specific hotfix. Generally allows quick response to any kind of issue (whether adding a feature, or addressing a security problem).
+
+   Whole workflow can be explained with 6 steps/principles. They have used effectively for teams up to ~35, and doubts many teams will get bigger than this (especially doing this kind of rapid deployment).
+
+   1. Anything on master is deployable. The only hard rule. Master is the only branch that has a specific and consistent meaning. The latest commit is either deployed, or about to be. Almost never gets reset (fixed either by revert, or new commits being introduced). Every commit is expected to be stable, so can deploy it, or base new features off it. Should run tests etc on other branches before merging into master (uses Jenkins to automate this).
+
+   2. To work on something new, create a descriptively-named branch off master. Helps make it clear what other things are being worked on (whether seeing what others are doing, or resuming your own work that you've been away from for a while). GitHub can list recently active branches, how far back they diverge, and how many new commits they have.
+
+   3. Commit to that feature branch locally, and share it. As master is the only important branch, you can do whatever you want with other branches. This also ensures there are backups of your work. Running 'git fetch' lets you know what everyone has been working on.
+
+   4. If you need help, or the branch is ready, open a pull request. Common in open-source work, believes not enough people know about them otherwise (probably different now - this was written several years ago). Uses them as an internal code review system, or just to have conversations about a branch. Can send a request from any branch to any other in the same project, so can use to request someone else's (by username) help on a feature. Can make comments, comment on specific elements (individual lines of code, particular commits, etc), submit new code, etc. It's worth merging master into the branch regularly to keep it up to date.
+
+   5. If the feature has been reviewed and signed-off on, it can be merged into master. They aren't especially formal about it, just wanting someone else to post an okay (mentions comments like "+1", ":)", ":shipit:" are sufficient). Also has to pass the automated tests, however.
+
+   6. Once merged to master, you should deploy immediately. Even if not deployed immediately, people will be basing new feature branches off it which will get deployed soon after. It's better for you to initiate the deploy for your feature (makes it easier to direct praise/blame to the right person). Personal stake helps encourage making sure everything works and is stable. Have a script to do deployment that anyone can run.
+
+   Process being simple means it works whether your change is a simple one-line bugfix, or a 2-weeks-in-development additional feature. Making it simple and easy to use means the team members are less likely to skip/bypass the process. Git is complicated enough, so better to use the simplest possible workflow process to avoid mental overhead. Only change your process if it's not working, and don't add complexity unless it's necessary.
+
+   Recognises that teams with a different release strategy are better off using something different, and endorses gitflow.

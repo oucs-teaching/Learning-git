@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>5d: log --reflog</title>
+   <script src="../gitgraph.js"></script>
+</head>
+
+<body>
+
+
+   <h2>Starting Point</h2>
+
+   <div id="beforegraph"></div>
+
+
+   <h2>Task</h2>
+
+   <p>You have begun implementing a new feature, but forgot to create a new branch for it. Now the commits are gone; please retrieve them (if possible), and put them on a branch called '<strong><code>new-feature</code></strong>'.</p>
+
+
+   <h2>Model Answer</h2>
+
+   <ul>
+      <li>Find out the IDs of the dangling commits<br>This can be done in many ways, but we recommend comparing the output of "<code>[$] git log --oneline --graph</code>" with and without the "<code>--reflog</code>" option, which will reveal the structure of the commit history (see below).</li>
+   </ul>
+
+   <div id="refloggraph"></div>
+
+   <ul>
+      <li><code>[$] git checkout &lt;COMMIT-ID&gt;</code><br>Use the hashcode determined above for the tip of the unreferenced commits (labelled <span id="danglingtip1"></span> in the diagrams). This will switch to that commit, and give a warning about being in a "<code>detached HEAD</code>" state (see below).</li>
+   </ul>
+
+   <div id="aftergraph1"></div>
+
+   <ul>
+      <li><code>[$] git branch new-feature</code><br>This will create a new branch pointing to the tip of the unreferenced commits (labelled <span id="danglingtip2"></span> in the diagrams), and thus will no longer be in a "<code>detached HEAD</code>" state (see below).</li>
+   </ul>
+
+   <div id="aftergraph2"></div>
+
+   <ul>
+      <li><code>[$] git checkout master</code><br>Switches back to the '<strong><code>master</code></strong>' branch (see below).</li>
+   </ul>
+
+   <div id="aftergraph3"></div>
+
+
+   <script type="text/javascript">
+
+      const beforeContainer = document.getElementById("beforegraph");
+      const reflogContainer = document.getElementById("refloggraph");
+      const afterContainer1 = document.getElementById("aftergraph1");
+      const afterContainer2 = document.getElementById("aftergraph2");
+      const afterContainer3 = document.getElementById("aftergraph3");
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         colors: ["#008fb5", "#f1c109", "#979797"],
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const beforegraph = GitgraphJS.createGitgraph(beforeContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const refloggraph = GitgraphJS.createGitgraph(reflogContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph1 = GitgraphJS.createGitgraph(afterContainer1, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph2 = GitgraphJS.createGitgraph(afterContainer2, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      const aftergraph3 = GitgraphJS.createGitgraph(afterContainer3, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const danglingtipreference1 = document.getElementById("danglingtip1");
+      danglingtipreference1.innerHTML = letterHash[3];
+      const danglingtipreference2 = document.getElementById("danglingtip2");
+      danglingtipreference2.innerHTML = letterHash[3];
+
+      const beforeMaster = beforegraph.branch("master*");
+      beforeMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      beforeMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      beforeMaster.commit({ subject: "Add test", dotText: letterHash[2] });
+
+      const reflogMaster = refloggraph.branch("master*");
+      reflogMaster.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      reflogMaster.commit({ subject: "Add README", dotText: letterHash[1] });
+      const reflogUnreferenced = refloggraph.branch("unreachable");
+      reflogUnreferenced.commit({ subject: "Add feature", dotText: letterHash[2], unreachable: "yes" });
+      reflogUnreferenced.commit({ subject: "Fix bug", dotText: letterHash[3], unreachable: "yes" });
+      reflogMaster.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const afterMaster1 = aftergraph1.branch("master");
+      afterMaster1.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster1.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterUnreferenced = aftergraph1.branch("detached HEAD");
+      afterUnreferenced.commit({ subject: "Add feature", dotText: letterHash[2], unreachable: "detached HEAD" });
+      afterUnreferenced.commit({ subject: "Fix bug", dotText: letterHash[3], unreachable: "detached HEAD" });
+      afterMaster1.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const afterMaster2 = aftergraph2.branch("master");
+      afterMaster2.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster2.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature2 = aftergraph2.branch("new-feature*");
+      afterNewFeature2.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature2.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterMaster2.commit({ subject: "Add test", dotText: letterHash[4] });
+
+      const afterMaster3 = aftergraph3.branch("master*");
+      afterMaster3.commit({ subject: "Initial commit", dotText: letterHash[0] });
+      afterMaster3.commit({ subject: "Add README", dotText: letterHash[1] });
+      const afterNewFeature3 = aftergraph3.branch("new-feature");
+      afterNewFeature3.commit({ subject: "Add feature", dotText: letterHash[2] });
+      afterNewFeature3.commit({ subject: "Fix bug", dotText: letterHash[3] });
+      afterMaster3.commit({ subject: "Add test", dotText: letterHash[4] });
+
+   </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+   Changes made to gitgraph.js:
+
+- Message colour in "BlackArrow" template changed from "black" to "#000000" (for consistency)
+
+- Tidied svg path in function "createTag" (adding brackets, changing end-point of returning horizontal line, removing unnecessary bits)
+
+- Made branch label border thickness customisable ("branch.label.strokeWidth")
+
+- Made arrowhead angle customisable ("arrow.angle") to make arrowhead wider/narrower (as opposed to "arrow.size" attribute which changes arrowhead length)
+
+- Added arrow centering option ("arrow.centered", defaults to "false"); intended for use with "bezier" mergestyle, as with it the path and arrows don't align
+
+- Modified function "arrowSvgPath" (and Template class) for option to position arrow in centre between relevant commits
+
+- Modified function "arrowSvgPath" to fix arrow position for centered merge/diverge commits with longer spacing
+
+- Added adaptive brightness function to return appropriate shade of grey
+   (light if argument colour is dark, dark if argument colour is light;
+    4 shades of grey for four quarters of brightness range)
+   (see "greyscale.py" - greys chosen largely aesthetically)
+
+- In function "createBranchLabel", changed "fill: branch.style.label.bgColor" to use new adaptive brightness function (above)
+
+- In function "createTag", changed "fill: tag.style.color" to use new adaptive brightness function (above)
+
+- Changed commit dotText colour using adaptive brightness function (above)
+
+- In function "renderArrows", changed default colour to use new adaptive brightness function (above)
+
+- Adjusted positioning of branch labels (in functions "positionCommitsElements" and "moveElement") to better align with other features
+
+- Added "startingPoint" property to Branch class (and modified function "renderBranchLabels") to display a branch label at the commit it started from if there are no other commits on that branch
+
+- Modified functions "initCommitElements" and "positionCommitsElements" to allow for display of multiple branch labels
+
+- Added "unreachable" property to commits (defaults to "no", could also be "yes" or "detached HEAD"): prevents branch labels being shown (if "yes"); and changes colours for label (if "detached HEAD" - functions "createBranchLabel" and "renderBranchLabels"), dot (function "renderDot"), arrow (function "renderArrows"), and path (function "computeBranchesColor")
+
+- Added "unreachableColours" property (array of length 3 - intended as light, dark, and warning colour) to templates, to allow customisation (adapted functions "createBranchLabel", "renderBranchLabels", "renderDot", "renderArrows", and "computeBranchesColor" accordingly)

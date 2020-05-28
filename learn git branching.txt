@@ -1,0 +1,409 @@
+https://learngitbranching.js.org/
+
+Probably intended for people already familiar with git basics.
+
+Describes commit reasonably (as a snapshot of a project).
+
+Introduces branches, doesn't really explain what they are (just a title for a node).
+
+Doesn't explain what a "checkout" is the first time it's used (for switching to a new node/branch).
+
+Ignores potential for conflicts when merging.
+
+Demonstrates making all branches "the same colour" after merging without really getting into what that means. Branches seem to be assigned a unique, randomly-generated colour, but the colours can sometimes be too similar to easily distinguish; again, this is not explained anywhere.
+
+Doesn't explain "rebase" very clearly.
+
+Relative references are useful, but the exercise using them makes no sense.
+
+Introduces "fetch" first, clearly explains it as a download step - grabbing all the new stuff from the remote repository, but not changing your local branches (implies doesn't change anything locally). Doesn't initially mention that "pull" requires appropriate branch to be checked out, though later exercise suggests multiple pulls to update different branches (need to use "git pull origin master" to merge into a different branch than local "master", "git pull" will only work if current branch has a remote tracking branch). Their "fetch" command will grab every branch, but their "pull" command only grabs the current branch (e.g. if master is checkout out, "pull" only fetches origin/master)
+
+The "mixed", "advanced", "remote", and "remoteAdvanced" levels are the only ones that give a reason for what you are doing.
+
+"mixed2" (and implicitly "mixed3" - same scenario, different method) gives a reason that doesn't make sense (amending a commit, but overcomplicated) - whole thing could be done with one "rebase -i" (edit c2, pick c3) except that the interface doesn't allow for it
+
+"mixed5" introduces "git describe" which explains a node by its relation to its nearest tagged ancestor (if none exists, returns error), but doesn't give much justification for why you would use it.
+
+"advanced2" gives a reasonable introduction to the parameter for '^', but only explains the first parent as "the one displayed directly above". For a merge, the current node becomes the first parent, and other specified nodes/branches become parents in the order they are given on the command-line.
+
+"advanced3" is somewhat contrived, in that while it's plausible that branches should need to add some commits but not others (which is the point of "cherry-pick" after all), no rationale is given for why they need to be re-ordered.
+
+"remote1" is misleading about what "git clone" does (not recognising that it can take an arbitrary location - directory/url/file/etc - for the repository to clone), and the system does it backwards which makes things awkward.
+
+Similarly, "remote2" treats 'origin' as a keyword when it's just a default name for the remote repository's location.
+
+Introduces the merge/rebase controversy ("remoteAdvanced2").
+
+"remoteAdvanced3" is a very contrived task. Doesn't explicitly address that only one local branch can track a given remote branch at a time.
+
+"remoteAdvanced" 5 and 6 introduce the wierd behaviour of push/fetch when using the "source:destination" parameter (creating destination branch if it doesn't exist).
+
+"remoteAdvanced6" is ridiculous; it focuses on the "source:destination" parameter for fetch, even though they admit you're never likely to use it. Done to show the parallels between "push" and "fetch", though this doesn't really add to the student's understanding.
+
+"remoteAdvanced7" is similarly ridiculous - it focuses a wierd quirk of the "source:destination" parameter being given no source. Another example of behaviours that there is a better (i.e. more understandable) way to do (deleting remote branch/creating local branch).
+
+"remoteAdvanced8" just shows that "pull" is exactly "fetch" + "merge", through a fairly contrived task. Points out it can be worth pulling multiple times with different branches checked out if you want to update them all with changes from the remote (though a single fetch and multiple merge commands probably makes more sense). "pull" always merges with the currently checked-out branch.
+
+----------------------
+
+INTERFACE COMMANDS:
+(also has commands for Mercurial (beginning with hg) that I'm ignoring)
+
+start dialog
+   (show introduction for current tutorial)
+
+show/hide goal
+   (display/hide desired tree for current tutorial)
+
+show solution
+   (display step-by-step commands to solve current tutorial)
+
+objective
+   (display goal instructions for current tutorial)
+
+reset solved
+   (delete records of which tutorials you have solved)
+
+help [level]
+   (display instructions for the system/current tutorial)
+
+reset
+   (revert to this tutorial's initial repository tree)
+
+delay N
+   (wait N milliseconds before moving on to the next instruction)
+
+clear
+   (clear previously-entered commands in command-line window)
+
+sandbox/exit level
+   (quit the current tutorial; free interaction with repository tree)
+
+level NAME
+   (run a particular tutorial, e.g. "intro2")
+
+levels
+   (display menu window to select a tutorial)
+
+build level
+   (create a tutorial; switches to different mode; exports finished level as
+    json)
+
+export tree
+   (export current repository tree as a json blob file)
+
+import tree/level
+   (import a repository tree/tutorial from a json blob file)
+
+importLevelNow/importTreeNow JSONTEXT
+   (import a respository tree/tutorial as json entered on the command line)
+
+undo
+   (move back in the undo stack, only certain commands (git commands?) get
+    stacked)
+
+share permalink
+   (provide url for the current repository tree)
+
+------
+
+GIT COMMANDS:
+
+git commit [--amend]
+   (make a new commit to the current repository branch; --amend instead changes
+    current node, making a new branch from the same parent (first parent only))
+
+git branch [-f] NAME [LOCATION]
+   (create a new branch called NAME at the current/specified commit;
+    -f option forces an existing branch to location node)
+git branch -u REMOTE [LOCAL]
+   (set current/specified (local) branch to track specified (remote) branch)
+
+git checkout [-b] NAME
+   (select named branch to be the current; -b option to create new branch)
+
+git merge NAME
+   (create a new commit that combines the specified branch into the current one)
+
+git rebase [-i] DESTINATION [SOURCE]
+   (copy the current/source branch as a new branch under the destination node;
+    if the source node is a parent of the destination node it just moves that
+    branch to the destination node; -i gives interactive mode where you can
+    choose to re-order or omit the copied nodes)
+
+git log [--all]
+   (display commit history for the current branch/whole tree)
+
+^[N]
+   (refers to (Nth) parent of specified node) (HOW ARE THEY ORDERED?)
+
+~[N]
+   (refers to one/N step(s) up the tree from the specified node)
+
+git reset LOCATION
+   (moves the current branch to the specified node; "undoes" commits up the tree
+    until reaches common ancestor)
+git reset FILE(s)
+   (the opposite of the same command with "add" - removes those files/changes
+    from the staging area)
+
+git revert LOCATION
+   (undo a single node for a remote repository; creates a new commit that is a
+    copy of the current node minus the changes in the specified node)
+
+git cherry-pick NAME(s)
+   (commit copies of the specified node(s) into the current branch)
+
+git tag NAME [LOCATION]
+   (add a "permanent" name to current/specified node)
+
+git describe [LOCATION]
+   (outputs steps to current/specified node from nearest tag)
+
+git clone
+   (make remote copy of local repository; actually the reverse, but done this
+    way to make the tutorial less complicated)
+
+git fetch [REMOTE] [[SOURCE]:DESTINATION]
+   (adds new commits from current/specified remote repository to local one, based
+    on remote tracking; will make new branch if local has other new commits; if
+    specified, adds commits from source (remote) branch to destination (local)
+    branch; if destination doesn't exist, will create a new local branch with that
+    name; omitted source - fetching "nothing" - is the same as creating a new
+    (local) branch)
+
+git pull [--rebase]
+   (does the same as "fetch" plus does appropriate merging/rebasing of new
+    commits)
+
+git fakeTeamwork [BRANCH] [N]
+   (make a/N commit(s) to master/specified branch in the remote repository; not
+    a real git command, only relevant for the tutorials)
+
+git push [REMOTE] [[SOURCE]:DESTINATION]
+   (update remote repository from local one; like "pull" in reverse, but won't
+    let you push if the remote repository has other new commits; adds commits
+    from source (local) branch to destination (remote) branch; omitted source -
+    pushing "nothing" - will delete the remote branch, and any local branch
+    tracking it)
+
+------
+
+AVAILABLE BUT UNEXPLAINED GIT COMMANDS (don't appear in any of the tutorials):
+
+git add FILE(s)
+   (add files/changes to the staging area)
+
+git remote
+   (returns the name of the current remote repository, can be used to
+    manage - i.e. add, remove, rename, etc. - remote repositories)
+
+git rev-list [^]LOCATION(s)
+   (lists the parents of the specified node(s), traced back to the root,
+    excluding any reachable from locations with ^ (set difference operation))
+
+git show [OBJECT(s)]
+   (shows details of the current (local) commit node/specified object(s))
+
+git status
+   (show the current status of the (local) repository: what has changed since
+    the last commit, and what is "staged" (ready to commit))
+
+----------------------
+
+INTRODUCTION SEQUENCE
+
+intro1 (2) - commit:
+   git commit
+   git commit
+
+intro2 (2) - branch, checkout:
+   git branch bugFix
+   git checkout bugFix
+
+intro3 (5) - merge:
+   git checkout -b bugFix
+   git commit
+   git checkout master
+   git commit
+   git merge bugFix
+
+intro4 (6) - (simple) rebase, checkout -b:
+   git checkout -b bugFix
+   git commit
+   git checkout master
+   git commit
+   git checkout bugFix
+   git rebase master
+
+----------------------
+
+RAMPING UP
+
+rampup1 (1) - detached HEAD:
+   git checkout c4
+
+rampup2 (1) - ^:
+   git checkout bugFix^
+
+rampup3 (3) - ~N:
+   git branch -f master c6
+   git branch -f bugFix bugFix~3
+   git checkout HEAD~1
+
+rampup4 (3) - (commit) reset, revert:
+   git reset local^
+   git checkout pushed
+   git revert pushed
+
+----------------------
+
+MOVING WORK AROUND
+
+move1 (1) - cherry-pick:
+   git cherry-pick bugFix c4 another
+
+move2 (1) - (interactive) rebase:
+   git rebase -i overHere (c3, c5, c4)
+
+----------------------
+
+A MIXED BAG
+
+mixed1 (cherry-pick 2) - :
+   git checkout master
+   git cherry-pick bugFix
+mixed1 (rebase 2) - :
+   git rebase -i master (c4)
+   git rebase bugFix master
+
+mixed2 (4) - commit --amend:
+   git rebase -i master (c3, c2)
+   git commit --amend
+   git rebase -i master (c2'', c3')
+   git rebase caption master
+mixed3 (4) - :
+   git checkout master
+   git cherry-pick newImage
+   git commit --amend
+   git cherry-pick caption
+/***
+Works for both "mixed3" and "mixed4" and gives a less messy tree:
+git checkout c2
+git commit --amend
+git rebase HEAD caption
+git rebase caption master
+***/
+
+mixed4 (3) - tag:
+   git tag v0 side~2
+   git tag v1 side~1
+   git checkout v1
+
+mixed5 (1) - describe:
+   (git describe c3)
+   git commit
+
+----------------------
+
+ADVANCED TOPICS
+
+advanced1 (4) - :
+   git rebase master bugFix
+   git rebase bugFix side
+   git rebase side another
+   git rebase another master
+
+advanced2 (1) - ^N:
+   git branch bugWork master~^2^
+
+advanced3 (5) - branch -f:
+   git checkout one
+   git cherry-pick c4 c3 c2
+   git checkout two
+   git cherry-pick c5 c4 c3 c2
+   git branch -f three c2
+
+----------------------
+
+PUSH & PULL -- GIT REMOTES!
+
+remote1 (1) - clone:
+   git clone
+
+remote2 (3) - remote tracking:
+   git commit
+   git checkout o/master
+   git commit
+
+remote3 (1) - fetch:
+   git fetch
+
+remote4 (1) - pull:
+   git pull
+
+remote5 (4) - :
+   git clone
+   git fakeTeamwork 2
+   git commit
+   git pull
+
+remote6 (3) - push:
+   git commit
+   git commit
+   git push
+
+remote7 (5) - pull --rebase:
+   git clone
+   git fakeTeamwork
+   git commit
+   git pull --rebase
+   git push
+
+----------------------
+
+TO ORIGIN AND BEYOND -- ADVANCED GIT REMOTES!
+
+remoteAdvanced1 (6) - :
+   git fetch
+   git rebase o/master side1
+   git rebase side1 side2
+   git rebase side2 side3
+   git rebase side3 master
+   git push
+
+remoteAdvanced2 (6) - :
+   git checkout master
+   git pull
+   git merge side1
+   git merge side2
+   git merge side3
+   git push
+
+remoteAdvanced3 (4):
+   git checkout -b side o/master
+   git commit
+   git pull --rebase
+   git push
+
+remoteAdvanced4 (2) - push parameters:
+   git push origin master
+   git push origin foo
+
+remoteAdvanced5 (2) - push source:destination:
+   git push origin master^:foo
+   git push origin foo:master
+
+remoteAdvanced6 (4) - fetch parameters:
+   git fetch origin master^:foo
+   git fetch origin foo:master
+   git checkout foo
+   git merge master
+
+remoteAdvanced7 (2) - empty source:
+   git push origin :foo
+   git fetch origin :bar
+
+remoteAdvanced8 (2) - pull parameters:
+   git pull origin bar:foo
+   git pull origin master:side

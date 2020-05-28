@@ -1,0 +1,57 @@
+http://swcarpentry.github.io/git-novice/
+https://software-carpentry.org/blog/2018/05/git-worksheets.html
+   - blog post reiterates the value of describing the three areas, and the commit
+     tree (with directed connections), suggests working through things on
+     paper/whiteboard to get students more involved
+
+Good introduction/motivation and setup advice.
+
+"git diff [--staged] [--color-words]" shows changes between working directory/[staging area] and last commit. Colour option useful if changes are not full lines of text (e.g. spelling corrections).
+
+More in-depth coverage of what's going on in early stages (e.g. init, add, commit), particularly output messages. If we're dealing with CS students who are familiar with working with a command-line and finding the relevant gleanings from verbose output, we can probably simplify a lot of this.
+
+Overly focused on individual files, which leads to some awkwardness/apparent misunderstandings.
+
+Diagrams generally unhelpful (e.g. what are the barrels?).
+
+Barely mentions branches (as something you are advised to use when collaborating, but doesn't say what they _are_), let alone the commit tree structure. No wonder they don't cover "detached HEAD" or merges very well.
+
+-----------------------
+
+   1. Automated Version Constrol
+General background of version control, and the idea of tracking and merging changes from different users (branches implicit in some diagrams, but not mentioned).
+
+   2. Setting Up Git
+Git configuration; username, email, line-endings, text editor, etc.
+
+   3. Creating a Repository
+"git init" and why not to nest repositories.
+
+   4. Tracking Changes
+Introduces "status, add, commit, log, diff" commands, general discussion of the staging area.
+
+   5. Exploring History
+Introduces "~N, show, detached HEAD". Doesn't explain detached HEAD beyond a "look but don't touch" warning - later exercise seems to misunderstand what it means. "How it works" cartoon is unhelpful. Shows that you can checkout earlier versions of individual files independantly - dangerous (see "general notes.txt"), but it's not a "detached HEAD" situation (doesn't move HEAD).
+
+   6. Ignoring Things
+Using ".gitignore" to omit unnecessary files from the repository (e.g. compiled files, logs, output, etc.)
+
+   7. Remotes in GitHub
+Introduces "remote -v (view), remote add, push, pull". Making a remote repository from a local one (create empty, add as remote, then push to it). "origin" as a convention, not a requirement - just a name. Settings issues for proxies, ssh authentication, etc. Introduces dangerous merge/pull option to forcibly merge a repository with an unrelated history - why would you ever want to do this?
+
+   8. Collaborating
+Introduces "git remote" options ('remove', 'rename', 'set-url' (e.g. if changed host, or made typo). Suggests simple "pull->change->add->commit->push" workflow to help reduce conflicts. Mentions "fetch" as a way to see if anyone has changed a remote repository, but doesn't say that it's actually copying all the new commits from the remote. Asks about the advantage of version control over basic backup software (e.g. timestamped dumps of entire project), but hasn't introduced many (only the ability to collaborate).
+
+   9. Conflicts
+Conflicting change can be committed locally, but will fail when pushed/pulled. Pulling marks merge conflict for manual resolution (text-based files). Binary files (e.g. images) are just noted as conflicting, and user must choose which version (or both, but will have to rename) to include in the merged commit. Only shows conflicts for "pull" (implicit "merge").
+
+Suggests making small, frequent commits to reduce the impact of any conflicts. Still has the old-style attitude of trying to avoid people working on the same bits at the same time. Points out having a consistent house style (formatting, white-space etc) can also help reduce problems (though it's a good idea on a collaborative project anyway).
+
+-----------------------
+
+Last few lessons useful, but not directly applicable to what we're trying to do.
+   10. Open Science
+   11. Licensing
+   12. Citation
+   13. Hosting
+   14. Using git from Rstudio

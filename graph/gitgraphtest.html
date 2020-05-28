@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>GitGraph.js testing</title>
+
+   <!--<script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>-->
+   <!--<script src="https://unpkg.com/@gitgraph/js"></script>-->
+
+   <script src="gitgraph.js"></script>
+
+</head>
+
+
+<body>
+   <div id="gitgraph"></div>
+   <script type="text/javascript">
+
+      const graphContainer = document.getElementById("gitgraph");
+
+      /*
+      Slowly building based on BlackArrow, need to put in js file
+      const myFormat = new Template({
+          colors: ["#6963FF", "#47E8D4", "#6BDB52", "#E84BA5", "#FFA657"],
+          branch: {
+              lineWidth: 2,
+              spacing: 50,
+              mergeStyle: MergeStyle.Straight,
+              label: {
+                  strokeWidth: 2.5,
+              },
+          },
+          commit: {
+              spacing: 60,
+              dot: {
+                  size: 20,
+                  strokeColor: "#000000",
+                  strokeWidth: 2,
+              },
+              message: {
+                  color: "#000000",
+                  displayHash: false,
+                  displayAuthor: false,
+              },
+          },
+          arrow: {
+              size: 10,
+              offset: 1,
+              angle: Math.PI / 4,
+              color: "#000000",
+          },
+      });*/
+
+      const myFormat2 = GitgraphJS.templateExtend(GitgraphJS.TemplateName.BlackArrow,
+      {
+         commit: {
+            dot: {
+               size: 20,
+               strokeWidth: 2,
+            },
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         branch: {
+            lineWidth: 2,
+            label: {
+               strokeWidth: 2.5,
+            },
+         },
+         arrow: {
+            size: 10,
+            offset: 1,
+            angle: Math.PI / 4,
+            color: "#000000",
+         }
+      });
+
+      const myFormat = GitgraphJS.templateExtend(GitgraphJS.TemplateName.Metro,
+      {
+         commit: {
+            message: {
+               displayHash: false,
+               displayAuthor: false,
+            },
+         },
+         arrow: {
+            size: 10,
+            centered: true,
+         }
+      });
+
+      const gitgraph = GitgraphJS.createGitgraph(graphContainer, {
+         template: myFormat2,
+         reverseArrow: true,
+      });
+
+      /*function randomLetter() {
+         // 65 = 'A' ... 90 = 'Z'
+         var random_ascii = Math.floor((Math.random() * 26) + 65);
+         return String.fromCharCode(random_ascii)
+      }*/
+
+      var letterHash = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+      var i, j, temp;
+      for (i = letterHash.length - 1; i > 0; i--) {
+         j = Math.floor((i + 1) * Math.random());
+         if (i != j) {
+            temp = letterHash[i];
+            letterHash[i] = letterHash[j];
+            letterHash[j] = temp;
+         }
+      }
+
+      const master = gitgraph.branch("master");
+      master.commit({ subject: "Init the project", dotText: letterHash[0] });
+      master.commit({ subject: "Add README", dotText: letterHash[1] })
+      master.commit({ subject: "Add tests", dotText: letterHash[2] })
+      master.commit({ subject: "Implement feature", dotText: letterHash[3] });
+      master.tag("v1.0");
+      const newFeature = gitgraph.branch("new-feature");
+      newFeature.commit({ subject: "Implement an awesome feature", dotText: letterHash[4] });
+      newFeature.commit({ subject: "Fix tests", dotText: letterHash[5] });
+      newFeature.tag("Awesome");
+      master.commit({ subject: "Hotfix a bug", dotText: letterHash[6] });
+      master.merge({ branch: "new-feature", fastForward: false, commitOptions: { subject: "Release new version", dotText: letterHash[7] } });
+
+   </script>
+</body>
+
+</html>

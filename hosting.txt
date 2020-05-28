@@ -1,0 +1,52 @@
+https://trends.google.com/trends/explore?q=git,svn,perforce,mercurial,tfs
+(shows git is by far the most popular vcs)
+
+https://trends.google.com/trends/explore?q=github,gitlab,bitbucket,sourceforge,rocketgit
+(shows github is by far the most popular hosting site)
+
+
+**GitHub
+**GitLab
+**BitBucket ("Commits", shows undirected labelled (without HEAD) bottom-up)
+**SourceForge ("Browse Commits", shows undirected unlabelled bottom-up)
+*Launchpad
+Gitea
+GNU Savannah
+GitBucket
+Gogs
+GitPrep
+Kallithea
+TuleapL
+Phabricator
+GitKraken
+Coding
+Assembla
+CloudForge
+
+(GitHub has the largest number of open-source projects)
+
+
+   https://git.wiki.kernel.org/index.php/GitHosting
+
+Lists (explicitly git) hosting services. The following provide open-source/private repos for free, with unlimited space (others restrict it to 1GB or less), listed in order of "popularity" (see below):
+
+- GitHub (3 collaborators for free private repos)
+- SourceForge (doesn't provide free private repos)
+- BitBucket (5 collaborators for free private repos)
+- GitLab (framework is open-source)
+- RocketGit
+- Visual Studio Team Services (doesn't provide free open-source repos, 5 users for free private repos), probably irrelevant as Microsoft bought GitHub
+
+
+https://en.wikipedia.org/wiki/Comparison_of_source-code-hosting_facilities#Popularity
+(GitHub has more than 6x as many users and more than 100x as many projects as the next largest)
+
+
+Got Git?
+What the fork?
+How to git a(detached)head
+Git some skills
+Git Me With Your Best Shot
+When the going Gits tough
+Step Away From The Lecture and No-one Gits Hurt
+Overcoming Fear of Commitment

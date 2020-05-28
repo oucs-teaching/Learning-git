@@ -1,0 +1,137 @@
+http://gitimmersion.com/
+
+Maybe useful as simple examples.
+
+Focused on "how-to" rather than "why-to".
+
+Individual "labs" very short.
+
+Covers working directory/staging area/repository but only incidentally when covering staging control.
+
+Limited coverage of commit tree (shows up when using "git log").
+
+Shows changing history (through "reset" or "commit --amend"); does show that commits are not completely gone, and makes vague mention of garbage collection.
+
+Covers (with unnecessarily detail?) contents of .git directory.
+
+At one point (~lab 30) wants to compare merge and rebase, has to go through complicated rewinding to pre-merged state.
+
+Introduces fetch before pull (pull as "fetch + merge") when covering remote repositories.
+
+----------------------
+
+Lab01:
+git config --global user.name <NAME>
+git config --global user.email <EMAIL>
+(can also set up core.autocrlf and core.safecrlf if likely to be cross-platform)
+
+Lab03:
+git init
+git add <FILE>
+git commit -m <MESSAGE>
+
+Lab04:
+git status
+
+Lab06:
+What "git add <FILE>" actually does (staging)
+git reset HEAD <FILE> (for unstaging)
+
+Lab08:
+What happens with "git commit" without "-m <MESSAGE>"
+
+Lab09:
+Git works with changes, not files (earlier labs make it seem focused on files), though it stores files (see lab 22-23)
+git add .
+
+Lab10:
+git log
+Some pretty formatting for "git log"
+gitx
+
+Lab11:
+Setting up git aliases, as well as shell aliases
+
+Lab12:
+git checkout <LOCATION>
+Hash-IDs, detached HEAD
+
+Lab13:
+git tag <NAME>
+git tag
+Relative references (^N, ~N)
+
+Lab14:
+Discard unstaged changes using "git checkout HEAD"
+
+Lab15:
+Discard staged changes using "git reset HEAD <FILE>" (cf. Lab06)
+
+Lab16:
+Undo committed changes using "git revert HEAD" (doesn't discard, makes new commit)
+
+Lab17:
+git reset <LOCATION>
+Don't mess with branches that are associated with remote repositories
+
+Lab18:
+git tag -d <NAME>
+
+Lab19:
+git commit --amend
+
+Lab22:
+What's in the ".git/" directory
+
+Lab23:
+Object storage in the ".git/" directory
+
+Lab24:
+git checkout -b <NAME>
+git branch <NAME>
+Create a branch
+
+Lab28:
+git merge <LOCATION>
+
+Lab30:
+Resolving (basic) merge conflicts
+
+Lab34:
+git rebase
+When to rebase/merge; don't rebase if branches associated with remote repositories, and/or if exact commit history is important
+
+Lab35:
+Fast-forward merge (merging current node with one of its descendants) - never a conflict
+
+Lab37:
+git clone
+
+Lab38:
+Difference of branches in cloned repository (doesn't copy branches by default, but will set tracking branches, and does copy tags)
+
+Lab39:
+Cloned repository by default refers to remote repository as "origin"
+
+Lab40:
+git branch [-a] (to list branches; only local, use -a to show remote tracking branches)
+
+Lab42:
+git fetch
+
+Lab44:
+git pull (as "fetch + merge"; doesn't mention that it merges the current branch)
+
+Lab45:
+git branch --track <LOCAL> <REMOTE>/<NAME> (set local branch to track remote branch)
+
+Lab46:
+git clone --bare <REPO> <FILE>.git
+Packages the ".git/" directory of a repository as a single file; another way to share a repository
+
+Lab47:
+git remote add <REMOTENAME> <FILE>.git
+Add a bare (i.e. packaged) repository as a remote repository with the given name
+
+Lab48:
+git push
